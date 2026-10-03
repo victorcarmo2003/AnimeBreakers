@@ -55,8 +55,8 @@ Toda task marcada **DoD-C** só vai para `Em QA` se cumprir, além dos critério
 
 | ID | Título | Dono | Onda | Depende de | Toca | Spec | Status |
 |---|---|---|---|---|---|---|---|
-| TASK-001 | Remover features Vital e Round (+ entradas `Vitals`/`Round` do Net, README raiz) | backend-coder | 0 | — | `src/Vital/`, `src/Round/`, `src/Libs/Net/init.luau`, `README.md` | PT-07, arch §9 | Em andamento (usuário removeu `src/Vital` e `src/Round`; falta tirar `Vitals`/`Round` do Net, regenerar e atualizar README raiz) |
-| TASK-002 | Net v0: novas entradas Lync | backend-coder | 0 | TASK-001 | `src/Libs/Net/init.luau` | `network.md` | Pendente |
+| TASK-001 | Remover features Vital e Round (+ entradas `Vitals`/`Round` do Net, README raiz) | backend-coder | 0 | — | `src/Vital/`, `src/Round/`, `src/Libs/Net/init.luau`, `README.md` | PT-07, arch §9 | Em QA (47765e2) |
+| TASK-002 | Net v0: novas entradas Lync | backend-coder | 0 | TASK-001 | `src/Libs/Net/init.luau` | `network.md` | Em QA (569b2c5; teste do Lync.start no Studio com o usuário) |
 | TASK-003 | `src/Shared/Content`: tipos, lookups e tabelas do v0 | backend-coder | 0 | — | `src/Shared/Content/*` | `content-data.md`, PT-10, PT-15, PT-20 | Em QA (commit 612ddd0 em branch de worktree, aguardando merge na main) |
 | TASK-007 | Assets placeholder R6, efeitos e mapa de dev | frontend-coder | 0 | — | `assets/roblox/`, `.rogen.json` | arch §8, PT-11, FEAT-023, DEC-019 | Em QA (commit 9563359 em branch de worktree, aguardando merge na main) |
 | TASK-027 | Plano de teste do v0 (A1–A19) | qa-tester | 0 | — | `docs/tests/v0-plan.md` | DEC-013 + alterações | Feito (`docs/tests/v0-plan.md`) |
@@ -131,6 +131,7 @@ Caminho crítico com UI: depende da data de entrega dos assets da HUD (TASK-013)
 | P2 | Erro de tipo em `src/Profile/server/ProfileService/init.luau:22` (`ProfileStore.New`). Causa provável: `wally.lock` divergente (arquivo modificado no working tree). | TASK-005: conferir `wally.lock`/versão do ProfileStore antes de mexer no Perfil; `tools/analyze.ps1` = 0 no arquivo | análise estática 2026-10-03 |
 | P3 | Variantes `Lite` dos efeitos (`BlinkOut`, `BlinkIn`, `SkillBurst`, `SkillCharge`) precisam entrar em `src/Shared/Content/Effects.luau` (campo da EffectDef em `content-data.md`). | TASK-012 (critério 2 depende disso) ou follow-up da TASK-003 se o QA da 003 pedir; quem pegar primeiro, uma de cada vez (conflito em `Effects.luau`) | QA TASK-003/TASK-007 |
 | P4 | Resolvida: PT-21..PT-25 registradas em DEC-036; FEAT-004/022/024 alinhados. | secretária | DEC-036 |
+| P5 | DEC-038: mapa de dev do v0 deve ter 1 spawn `ENM-001` + 1 spawn boss `ENM-002` (hoje 3× `ENM-001`); criar EnemyDef/AnimationSet do boss placeholder. Ajustar `assets/roblox/DevMap.rbxm` e `src/Shared/Content/Enemies.luau`. | task-planner | DEC-038 |
 
 ---
 

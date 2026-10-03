@@ -7,3 +7,5 @@ sourcemap.json
 /ServerPackages
 /DevPackages
 /probe/
+
+/.claude/worktrees/

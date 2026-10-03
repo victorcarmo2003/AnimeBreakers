@@ -405,3 +405,49 @@ Decisão técnica do `architect` (Revisão 3 de `tech/architecture.md`), resolve
 | PT-25 | `DevService` existe **só no Studio**, para testes. |
 
 - Impacto: FEAT-004, FEAT-022, FEAT-024, `tech/architecture.md`.
+
+### DEC-037 — 2026-10-03 — Lançamento com 5 ilhas
+
+- O jogo completo é lançado com **5 ilhas** no total (`ISL-01` a `ISL-05`). Pedido do PM/contratante.
+- A ilha 1 continua sendo o lobby (DEC-009).
+- Desbloqueio entre elas segue DEC-035 (4 passagens pagas: 1→2, 2→3, 3→4, 4→5).
+- Responde Q-013 em parte (quantidade de ilhas; opção b). Segue aberto: onde se compra a passagem (Provisório: portal na borda da ilha).
+- Impacto: FEAT-001, FEAT-013, Q-012 (curva de vida e preço da passagem para 5 ilhas), Q-041 (bosses por ilha × 5), escopo de assets do contratante.
+
+### DEC-038 — 2026-10-03 — Mapa de teste do v0: 1 spawn normal + 1 spawn de boss (altera DEC-013)
+
+- **Altera DEC-013** (escopo e critérios do v0) e o item "1 spawn point com 1 inimigo" de FEAT-002.
+- O v0 **não tem ilha**. O mapa de teste (baseplate, DEC-014) tem **exatamente 2 spawn points**:
+  1. 1 spawn de **inimigo normal** (`ENM-001`).
+  2. 1 spawn de **boss** (placeholder).
+- Objetivo: só testar mecânicas. Quando o contratante entregar o mapa, spawns e personagens são distribuídos conforme as features.
+- Consequência: o v0 precisa de um **EnemyDef de boss placeholder**. Valores **Provisórios** (o usuário não deu números):
+  - ID: `ENM-002`, marcado como boss nos dados.
+  - Vida: 10.000 (×10 do normal). Dinheiro: 1.000 (×10). Respawn: 5 s (igual ao normal, para agilizar o teste).
+  - Modelo: rig R6 placeholder em escala maior (~1,5×), com AnimationController + Animator. Rig custom real chega com o contratante (DEC-019).
+  - Não ataca (Q-018). Sem drop de itens, sem XP (fora do v0).
+- O mapa de dev atual (TASK-007) tem **3 spawns de `ENM-001`**: precisa virar 1 `ENM-001` + 1 `ENM-002`. Ajuste de tarefa fica com `task-planner`/`architect`.
+- Critérios do v0 alterados:
+  - A1 passa a ser: ao iniciar o servidor, o inimigo normal e o boss nascem cada um no seu spawn point e ficam parados.
+  - A12 passa a ser: roda em celular sem queda perceptível de FPS com os 2 inimigos (normal + boss) e pets de 2 jogadores.
+  - Novo A20: o boss usa os dados do próprio EnemyDef (vida, dinheiro, modelo maior); matar o boss soma o dinheiro do boss na HUD, dividido por dano (DEC-011); renasce no próprio spawn.
+  - Novo A21: o mapa de teste tem só os 2 spawns; trocar qual inimigo nasce num spawn é só mudar o dado do spawn, sem mudar código.
+- Impacto: FEAT-002, FEAT-028 (Parcial no v0), FEAT-001, `tasks/board.md` (TASK-007), `tests/`.
+
+### DEC-039 — 2026-10-03 — Divisão de XP da morte do inimigo
+
+- **Entre jogadores:** proporcional ao dano, como o dinheiro (DEC-011). Ex.: jogador A causou 40% do dano → recebe 40% da XP do inimigo.
+- **Entre os pets do próprio jogador:** a parte dele é dividida **igualmente** entre os pets que ele tem **equipados no momento da morte** do inimigo (opção b de Q-009). Motivo: progressão linear, ajuda pets fracos.
+- Regras de borda **Provisórias**: mesmas do dinheiro (overkill não conta, quem saiu perde a parte e o dano dele conta no denominador, PT-21); arredondar para baixo por pet.
+- Responde Q-009 item a. Seguem abertos em Q-009: XP por 1 pó estelar (a2), level máximo e curva (b), XP/level do jogador (c).
+- Impacto: FEAT-009. Fora do v0.
+
+### DEC-040 — 2026-10-03 — Slots de pets equipados: 3 → 5 por progressão, 6º por Game Pass
+
+- O jogador começa com **3 pets equipados**.
+- Sobe até **5** por progressão no jogo.
+- O **6º slot** é vendido por **Game Pass**.
+- Valores base ajustáveis pelo usuário (mudança vira nova DEC, não contradição).
+- Responde Q-008 em parte. Segue aberto: **como** sobe de 3 para 5 (o que libera o 4º e o 5º) e botão "equipar melhores".
+- v0 continua com 3 pets fixos (FEAT-006).
+- Impacto: FEAT-006, FEAT-018 (primeiro Game Pass definido), FEAT-025 (HUD com até 6 slots), FEAT-024 (até 6 pets na sequência por jogador).

@@ -13,24 +13,24 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 
 | ID | Feature | Fonte | v0 | Bloqueado por |
 |---|---|---|---|---|
-| FEAT-001 | Ilhas temáticas | DEC-003, DEC-014, DEC-025, DEC-035 |  | Q-013 |
-| FEAT-002 | Inimigos em spawn fixo e respawn | DEC-003, DEC-011 | Sim | Q-012, Q-018 |
+| FEAT-001 | Ilhas temáticas | DEC-003, DEC-014, DEC-025, DEC-035, DEC-037 |  | — |
+| FEAT-002 | Inimigos em spawn fixo e respawn | DEC-003, DEC-011, DEC-038 | Sim | Q-012, Q-018 |
 | FEAT-003 | Ataque do player | DEC-002 |  | Q-007 |
 | FEAT-004 | Dinheiro (moeda principal) | DEC-002, DEC-011, DEC-021 | Parcial | Q-012 |
 | FEAT-005 | Ovos | DEC-004 |  | Q-012 |
-| FEAT-006 | Pets: equipar e combater | DEC-004, DEC-020 | Parcial | Q-008, Q-018 |
+| FEAT-006 | Pets: equipar e combater | DEC-004, DEC-020, DEC-040 | Parcial | Q-008, Q-018 |
 | FEAT-007 | Comando por clique/toque | DEC-004, DEC-011, DEC-024 | Sim | — |
 | FEAT-008 | Raridades | DEC-005 |  | Q-010, Q-012 |
-| FEAT-009 | Level e experiência de pet | DEC-006, DEC-027, DEC-030, DEC-033 |  | Q-009 |
+| FEAT-009 | Level e experiência de pet | DEC-006, DEC-027, DEC-030, DEC-033, DEC-039 |  | Q-009 |
 | FEAT-010 | Venda de pets | DEC-006 |  | Q-012 |
 | FEAT-011 | Fusão e estrelas | DEC-007 |  | Q-011 |
 | FEAT-012 | Inventário de pets | DEC-004, DEC-018 | Parcial (só visual) | Q-021 |
-| FEAT-013 | Progressão dentro da ilha e desbloqueio de ilha | DEC-004, DEC-026, DEC-035 |  | Q-012, Q-013, Q-014 |
+| FEAT-013 | Progressão dentro da ilha e desbloqueio de ilha | DEC-004, DEC-026, DEC-035, DEC-037 |  | Q-012, Q-014 |
 | FEAT-014 | Ilha inicial como lobby | DEC-009, DEC-014 |  | — |
 | FEAT-015 | UI importada do Figma | DEC-010, DEC-013, DEC-017, DEC-018, DEC-021, DEC-022 | Sim (4 telas) | — |
 | FEAT-016 | Persistência de dados do jogador | implícito no loop |  | — |
 | FEAT-017 | Controles mobile-first | DEC-008 | Sim | Q-007 |
-| FEAT-018 | Monetização | — |  | Q-015 |
+| FEAT-018 | Monetização | DEC-040 (6º slot de pet) |  | Q-015 |
 | FEAT-019 | Trading | — |  | Q-016 |
 | FEAT-020 | Números de dano (BillboardGui) | DEC-013 | Sim | — |
 | FEAT-021 | Comando "parar de atacar" | DEC-013 | Sim | Q-030 |
@@ -40,7 +40,7 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 | FEAT-025 | Toggle de uso automático e skill manual por slot | DEC-016, DEC-022 | Sim | — |
 | FEAT-026 | Loja | DEC-018 | Parcial (só visual) | Q-015, Q-035 |
 | FEAT-027 | Battle Pass | DEC-018 | Parcial (só visual) | Q-015, Q-035 |
-| FEAT-028 | Bosses | DEC-019, DEC-026 |  | Q-041, Q-018 |
+| FEAT-028 | Bosses | DEC-019, DEC-026, DEC-038 | Parcial (1 boss placeholder) | Q-041, Q-018 |
 | FEAT-029 | Missões (principal, secundária, diária) | DEC-026, DEC-027, DEC-029, DEC-034 |  | Q-040 |
 | FEAT-030 | Equipamentos de pet (3 slots) | DEC-026, DEC-027, DEC-031, DEC-032 |  | Q-038 |
 | FEAT-031 | Recursos secundários: gemas, pó estelar, itens de upgrade/merge | DEC-026, DEC-027, DEC-030, DEC-033, DEC-034 |  | Q-039 |
@@ -52,9 +52,9 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 - Cada mapa é uma ilha `ISL-##`, com **tema de gênero** de anime, não de obra (DEC-025). Personagens originais, inspirados em arquétipos. Nenhum nome/visual de obra real.
 - Cada ilha tem: conjunto de inimigos `ENM-###`, um ovo `EGG-##`, spawn points.
 - Ilhas finais e seus modelos são feitos pelo **contratante** (DEC-014, corrige DEC-003). Layout não é responsabilidade dos agentes.
-- No v0: fora; usa o mapa de teste simples numa baseplate, montado pelo usuário (DEC-014).
+- No v0: fora. **Sem ilha** (DEC-038); usa o mapa de teste simples numa baseplate, montado pelo usuário (DEC-014), com 2 spawns (FEAT-002).
 - Desbloqueio: passagem paga + gate de vida (DEC-035, ver FEAT-013).
-- Número de ilhas no lançamento: A definir (Q-013).
+- Número de ilhas no lançamento: **5** (`ISL-01` a `ISL-05`), pedido do PM/contratante (DEC-037). Ilha 1 = lobby (FEAT-014).
 
 ## FEAT-002 — Inimigos em spawn fixo e respawn
 
@@ -70,9 +70,23 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 
 ### No v0
 
-- 1 spawn point com 1 inimigo placeholder, num baseplate.
-- Vida: **Provisório** 1.000. Respawn: **Provisório** 5 s. Inimigo não ataca.
-- Vida visível acima do inimigo (barra ou número; forma conforme Figma, Q-022).
+- Sem ilha. Mapa de teste numa baseplate com **exatamente 2 spawn points** (DEC-038, altera DEC-013):
+
+| Spawn | Inimigo | Vida | Dinheiro | Respawn | Modelo |
+|---|---|---|---|---|---|
+| 1 | `ENM-001` inimigo normal placeholder | **Provisório** 1.000 | **Provisório** 100 | **Provisório** 5 s | R6 placeholder |
+| 2 | `ENM-002` boss placeholder (marcado como boss nos dados) | **Provisório** 10.000 | **Provisório** 1.000 | **Provisório** 5 s | R6 placeholder ~1,5× (rig custom real vem do contratante, DEC-019) |
+
+- Nenhum dos dois ataca (Q-018).
+- Qual inimigo nasce em cada spawn é dado do spawn (ex.: atributo `EnemyId`), não código.
+- O mapa de dev atual da TASK-007 (3 spawns de `ENM-001`) precisa virar 1 `ENM-001` + 1 `ENM-002` (DEC-038).
+- Quando o contratante entregar o mapa, spawns e personagens são redistribuídos conforme as features.
+- Vida visível acima do inimigo (barra ou número; forma conforme Figma).
+- Critérios (DEC-038):
+  - A1: ao iniciar o servidor, o normal e o boss nascem cada um no seu spawn e ficam parados.
+  - A12: sem queda perceptível de FPS em celular com os 2 inimigos e pets de 2 jogadores.
+  - A20: o boss usa o próprio EnemyDef (vida, dinheiro, modelo maior); matar o boss soma o dinheiro dele na HUD, dividido por dano; renasce no próprio spawn.
+  - A21: o mapa tem só os 2 spawns; trocar o inimigo de um spawn é só mudar o dado do spawn.
 
 ## FEAT-003 — Ataque do player
 
@@ -113,12 +127,21 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 - Pets `PET-###` são personagens obtidos em ovos.
 - Pets equipados seguem o player e atacam o alvo escolhido (FEAT-007).
 - Dano do pet = dano base × multiplicador de level × multiplicador de estrela (forma **Provisória**).
-- Slots equipados: A definir (Q-008).
+- Slots equipados (DEC-040, base ajustável):
+
+| Slot | Como libera |
+|---|---|
+| 1–3 | inicial |
+| 4–5 | progressão no jogo — forma A definir (Q-008 a) |
+| 6 | Game Pass (FEAT-018) |
+
+- Máximo absoluto: 6 pets equipados. HUD (FEAT-025) e sequência de combate (FEAT-024) suportam até 6.
+- Botão "equipar melhores": A definir (Q-008 b).
 - Pet sem alvo: segue o player (comportamento **Provisório**).
 
 ### No v0
 
-- 3 pets placeholder já equipados ao entrar (**Provisório**, Q-008). Sem ovo.
+- 3 pets placeholder já equipados ao entrar (**Provisório**; igual ao slot inicial de DEC-040). Sem ovo.
 - Ataque básico automático: **Provisório** 10 de dano a cada 1,0 s por pet. Todos os pets no alvo causam dano ao mesmo tempo, mesmo sem estar animando (DEC-020).
 - Habilidade: ver FEAT-022. Coreografia: ver FEAT-024.
 
@@ -150,7 +173,13 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 - Pó estelar não é sistema separado: é só XP (DEC-033). O level é o mesmo nos dois caminhos.
 - Uso do pó: tela do pet no inventário (FEAT-012), quantidade escolhida pelo jogador — **Provisório**.
 - XP que passa do level máximo com pó: o pó não é consumido além do necessário — **Provisório**.
-- A definir (Q-009): divisão da XP da morte entre pets e jogadores, XP por 1 pó estelar, level máximo, curva, XP do jogador.
+- Divisão da XP da morte do inimigo (DEC-039):
+  1. Entre jogadores: proporcional ao dano. `XP do jogador = XP do inimigo × (dano do jogador ÷ soma do dano de todos)`.
+  2. Entre os pets do jogador: `XP por pet = XP do jogador ÷ nº de pets equipados no momento da morte` (divisão igual, ajuda pets fracos).
+  - Ex.: inimigo vale 1.000 XP; jogador A causou 40% → 400 XP; A tem 4 pets equipados → 100 XP para cada.
+  - Regras de borda **Provisórias**: mesmas do dinheiro (FEAT-004: overkill não conta; quem saiu perde a parte e o dano dele conta no denominador); arredondar para baixo por pet.
+  - Pet equipado conta mesmo que não tenha chegado ao alvo — **Provisório** (o usuário disse "equipados naquele momento").
+- A definir (Q-009): XP por 1 pó estelar, level máximo, curva, XP do jogador.
 
 ## FEAT-010 — Venda de pets
 
@@ -202,12 +231,13 @@ Duas camadas:
 - Sem outro requisito: missão **não** destrava ilha (DEC-029), boss **não** é obrigatório (DEC-026).
 - Ilhas em ordem: só compra a passagem da ilha N+1 quem já tem a ilha N — **Provisório**.
 - Ilha já desbloqueada: viagem livre entre ilhas — **Provisório**.
-- Onde se compra a passagem (portal/NPC/UI): **Provisório** portal na borda da ilha com prompt de compra (Q-013).
+- Onde se compra a passagem (portal/NPC/UI): **Provisório** portal na borda da ilha com prompt de compra (Q-013, não bloqueante).
+- 5 ilhas → 4 passagens: 1→2, 2→3, 3→4, 4→5 (DEC-037).
 - Critérios de aceite (jogo completo):
   - Sem dinheiro suficiente: compra recusada, dinheiro não muda, mensagem na UI.
   - Com dinheiro: valor exato descontado, ilha desbloqueada na hora, persiste após sair e voltar.
   - Passagem comprada não é cobrada de novo.
-- Quantidade de ilhas no lançamento: A definir (Q-013).
+- Quantidade de ilhas no lançamento: 5 (DEC-037).
 
 ## FEAT-014 — Ilha inicial como lobby
 
@@ -252,7 +282,8 @@ Duas camadas:
 
 ## FEAT-018 — Monetização
 
-- Gamepasses `GP-##` e developer products `DP-##`. A definir (Q-015).
+- Gamepasses `GP-##` e developer products `DP-##`. Lista completa: A definir (Q-015).
+- Já decidido: **Game Pass do 6º slot de pet equipado** (DEC-040). ID `GP-##` e preço em Robux: A definir (Q-015).
 - Deve seguir as regras de conteúdo e monetização do Roblox (inclui exibir chances de itens pagos aleatórios, se ovo for vendido por Robux).
 
 ## FEAT-019 — Trading
@@ -403,7 +434,7 @@ Status: **Rascunho**.
 - **Opcionais**, exceto quando uma missão exige (FEAT-029).
 - Recompensas valiosas: equipamentos de pet (FEAT-030), gemas, pó estelar, itens de upgrade/merge (FEAT-031).
 - Spawn, respawn, quantidade por ilha, vida, recompensa e regra de drop: A definir (Q-041). Se atacam: Q-018.
-- Fora do v0.
+- No v0: Parcial (DEC-038) — 1 boss placeholder `ENM-002` no spawn 2 do mapa de teste. Mesmo sistema de inimigo, com dados próprios (ver FEAT-002, "No v0"). Sem drop, sem XP, sem missão.
 
 ## FEAT-029 — Missões progressivas
 
