@@ -7,9 +7,8 @@ return Lync.define("game", {
 	Ready = Lync.packet(Lync.empty()),
 
 	Profile = Lync.packet(Lync.struct({
-		Coins = Lync.int(0, 2147483647),
-		Level = Lync.int(1, 1000),
-		Playtime = Lync.f32(),
+		Coins = Lync.vlq(),
+		AutoSkill = Lync.bool(),
 	})),
 
 	Inventory = Lync.packet(Lync.struct({
