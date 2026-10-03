@@ -16,6 +16,20 @@
 				},
 				"DevPackages": {
 					"$path": "DevPackages"
+				},
+				"Assets": {
+					"$className": "Folder",
+					"Characters": {
+						"$path": "assets/roblox/Characters"
+					},
+					"Effects": {
+						"$path": "assets/roblox/Effects"
+					}
+				}
+			},
+			"Workspace": {
+				"Map": {
+					"$path": "assets/roblox/DevMap.rbxm"
 				}
 			},
 			"ServerScriptService": {

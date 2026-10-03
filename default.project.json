@@ -8,6 +8,15 @@
 		"Lighting": {},
 		"ReplicatedFirst": {},
 		"ReplicatedStorage": {
+			"Assets": {
+				"$className": "Folder",
+				"Characters": {
+					"$path": "assets/roblox/Characters"
+				},
+				"Effects": {
+					"$path": "assets/roblox/Effects"
+				}
+			},
 			"DevPackages": {
 				"$path": "DevPackages"
 			},
@@ -161,6 +170,10 @@
 				}
 			}
 		},
-		"Workspace": {}
+		"Workspace": {
+			"Map": {
+				"$path": "assets/roblox/DevMap.rbxm"
+			}
+		}
 	}
 }
