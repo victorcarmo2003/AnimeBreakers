@@ -57,14 +57,14 @@ Toda task marcada **DoD-C** só vai para `Em QA` se cumprir, além dos critério
 |---|---|---|---|---|---|---|---|
 | TASK-001 | Remover features Vital e Round (+ entradas `Vitals`/`Round` do Net, README raiz) | backend-coder | 0 | — | `src/Vital/`, `src/Round/`, `src/Libs/Net/init.luau`, `README.md` | PT-07, arch §9 | Em QA (47765e2) |
 | TASK-002 | Net v0: novas entradas Lync | backend-coder | 0 | TASK-001 | `src/Libs/Net/init.luau` | `network.md` | Em QA (569b2c5; teste do Lync.start no Studio com o usuário) |
-| TASK-003 | `src/Shared/Content`: tipos, lookups e tabelas do v0 | backend-coder | 0 | — | `src/Shared/Content/*` | `content-data.md`, PT-10, PT-15, PT-20 | Em QA (commit 612ddd0 em branch de worktree, aguardando merge na main) |
-| TASK-007 | Assets placeholder R6, efeitos e mapa de dev | frontend-coder | 0 | — | `assets/roblox/`, `.rogen.json` | arch §8, PT-11, FEAT-023, DEC-019 | Em QA (commit 9563359 em branch de worktree, aguardando merge na main) |
+| TASK-003 | `src/Shared/Content`: tipos, lookups e tabelas do v0 | backend-coder | 0 | — | `src/Shared/Content/*` | `content-data.md`, PT-10, PT-15, PT-20 | Em QA (612ddd0, na main) |
+| TASK-007 | Assets placeholder R6, efeitos e mapa de dev | frontend-coder | 0 | — | `assets/roblox/`, `.rogen.json` | arch §8, PT-11, FEAT-023, DEC-019 | Em QA (9563359, na main) |
 | TASK-027 | Plano de teste do v0 (A1–A19) | qa-tester | 0 | — | `docs/tests/v0-plan.md` | DEC-013 + alterações | Feito (`docs/tests/v0-plan.md`) |
-| TASK-004 | `ContentService`: validação das tabelas no boot | backend-coder | 1 | TASK-003, TASK-007 | `src/Content/server/ContentService.luau` | `content-data.md` "Validação" | Pendente |
-| TASK-005 | Perfil v0: Template, Mock, Mutate, Migrations, replicação dividida, ProfileController | backend-coder | 1 | TASK-002, TASK-003 | `src/Profile/**`, `src/Libs/Net/init.luau` (só `Profile`) | `data.md`, PT-08, PT-09, PT-16, PT-20 | Pendente |
-| TASK-006 | `EnemyService` + Component `EnemySpawn` + `DevService` + `EnemyDevService` | backend-coder | 1 | TASK-002, TASK-003, TASK-007 | `src/Enemy/server/*`, `src/Dev/server/DevService.luau` | arch §4.2, §4.6, PT-02, PT-21, PT-25, FEAT-002 | Pendente |
-| TASK-008 | `RigAnimator` + IDs de animação placeholder | frontend-coder | 1 | TASK-003, TASK-007 | `src/Rig/RigAnimator/`, `src/Shared/Content/AnimationSets.luau` | arch §5.6, PT-15 | Pendente |
-| TASK-009 | UI base: componentes Vide genéricos + convenção `Interface.luau` | frontend-coder | 1 | TASK-003 | `src/Interface/client/Components/*`, `src/Shared/Content/Interface.luau` | FEAT-015, DEC-017, arch §7.4 | Pendente |
+| TASK-004 | `ContentService`: validação das tabelas no boot | backend-coder | 1 | TASK-003, TASK-007 | `src/Content/server/ContentService.luau` | `content-data.md` "Validação" | Em QA (e776591) |
+| TASK-005 | Perfil v0: Template, Mock, Mutate, Migrations, replicação dividida, ProfileController | backend-coder | 1 | TASK-002, TASK-003 | `src/Profile/**`, `src/Libs/Net/init.luau` (só `Profile`) | `data.md`, PT-08, PT-09, PT-16, PT-20 | Em QA (9f098f1; P2 resolvida) |
+| TASK-006 | `EnemyService` + Component `EnemySpawn` + `DevService` + `EnemyDevService` | backend-coder | 1 | TASK-002, TASK-003, TASK-007 | `src/Enemy/server/*`, `src/Dev/server/DevService.luau` | arch §4.2, §4.6, PT-02, PT-21, PT-25, FEAT-002 | Em QA (bbfa936; inclui ENM-002 Provisório, P5 parcial) |
+| TASK-008 | `RigAnimator` + IDs de animação placeholder | frontend-coder | 1 | TASK-003, TASK-007 | `src/Rig/RigAnimator/`, `src/Shared/Content/AnimationSets.luau` | arch §5.6, PT-15 | Em QA (3ee92ce) |
+| TASK-009 | UI base: componentes Vide genéricos + convenção `Interface.luau` | frontend-coder | 1 | TASK-003 | `src/Interface/client/Components/*`, `src/Shared/Content/Interface.luau` | FEAT-015, DEC-017, arch §7.4 | Em QA (dd81734) |
 | TASK-010 | `PetService`: unidades, StarterPets, set `Pets` | backend-coder | 2 | TASK-005 | `src/Pet/server/PetService.luau` | arch §4.3, `data.md` | Pendente |
 | TASK-011 | `EnemyController` + `HealthBar` (Vide) | frontend-coder | 2 | TASK-006, TASK-007, TASK-008 | `src/Enemy/client/*` | arch §3, §7.1, FEAT-002 | Pendente |
 | TASK-012 | `EffectController` (pool, limite, `Lite`) | frontend-coder | 2 | TASK-003, TASK-007 | `src/Effect/client/EffectController.luau` | arch §7.1, §10, `content-data.md` EffectDef | Pendente |
