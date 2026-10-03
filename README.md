@@ -41,9 +41,6 @@ a pasta guarda a **feature**, e cada uma traz o seu `server/` e `client/`:
 src/Net/       server/NetService        client/NetController
 src/Player/    server/PlayerService
 src/Profile/   server/ProfileService    client/ProfileController
-src/Vital/     server/VitalService      client/VitalController
-               server/Vital  (componente)
-src/Round/     server/RoundService      client/RoundController
 src/Input/                              client/InputController
 src/Interface/                          client/ (componentes Vide e stories)
 
@@ -52,8 +49,8 @@ src/Shared/    Types utilitarios (Occlude, Struct, Union) e tablejs
 src/Libs/      injetadas em self.Libs: Signal, Promise, FSM, Charm, Net
 ```
 
-O caminho vira o lugar no DataModel: `src/Vital/server/` chega como
-`ServerScriptService.server.Vital`. Feature nova é uma pasta nova, com as duas
+O caminho vira o lugar no DataModel: `src/Profile/server/` chega como
+`ServerScriptService.server.Profile`. Feature nova é uma pasta nova, com as duas
 metades juntas — e apagar a feature é apagar a pasta.
 
 Um módulo é uma pasta com `init.luau`, nunca um arquivo solto: o gerador escreve
@@ -68,14 +65,14 @@ As definições ficam em `src/Libs/Net/init.luau`, um `Lync.define` só, requeri
 pelos dois lados. Adicionar tráfego é adicionar uma entrada ali.
 
 ```lua
-Vitals = Lync.replicate(Lync.struct({
-	Health = Lync.int(0, 100),
-	Armor = Lync.int(0, 100),
-	Stamina = Lync.int(0, 100),
+Enemies = Lync.replicate(Lync.struct({
+	Enemy = Lync.str(1, 24),
+	Health = Lync.vlq(),
+	Alive = Lync.bool(),
 })),
 ```
 
-Do lado do código, `self.Libs.Net.Vitals:update(...)` já vem tipado pelo schema.
+Do lado do código, `self.Libs.Net.Enemies:update(...)` já vem tipado pelo schema.
 
 **O schema é validado em runtime, dentro de `Lync.start()`.** `analyze.ps1`
 passando não diz nada sobre ele: um `keyBy` inválido compila e só estoura no
@@ -93,7 +90,7 @@ Studio, levando junto tudo que depende do start.
 UserId é recusado no start, e um `int` com o range de UserId seria uma grade
 absurda. Set é para time, sala, região.
 
-Por isso `Vitals` é set (todos veem) e `Profile` é packet direcionado
+Por isso `Enemies` é set (todos veem) e `Profile` é packet direcionado
 (`fireClient(player, ...)`), privado por construção — não por uma alocação de
 chave que um bug poderia errar.
 
@@ -182,7 +179,7 @@ Daí saem duas regras:
 - **Varredura de quem já está no servidor vai no `OnStart`, não no `OnInit`.**
   `PlayerService` faz isso: varrendo no `OnInit`, os serviços de prioridade
   menor ainda não tinham conectado seus handlers e perderiam quem já estava lá,
-  e o `Vitals:add` do componente rodaria antes do `Lync.start()`.
+  e um `add` de set feito por componente rodaria antes do `Lync.start()`.
 
 ---
 
@@ -192,9 +189,7 @@ Daí saem duas regras:
 |---|---|
 | `PlayerService` | entrada e saída de jogador e de personagem em Signals, tratando quem já estava no servidor |
 | `ProfileService` | ProfileStore + campos reativos: `profile.Coins(100)` escreve, `profile.Coins()` lê |
-| `VitalService` + `Vital` | Health/Armor/Stamina por jogador, dano com absorção por armadura, regen de stamina a 4 Hz, morte e respawn |
 | `InputController` | `ContextActionService` com contexto (Gameplay/Menu), binds desktop e mobile |
-| `RoundService` | ciclo de rodada em `atom` do Charm, com `batch` e `effect` replicando |
 | `Counter` | componente Vide com story do UI Labs, para provar o caminho de UI |
 
 O throttle manual de replicação que a versão anterior deste template carregava
