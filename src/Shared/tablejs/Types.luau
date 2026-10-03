@@ -1,5 +1,3 @@
---!strict
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Struct = require(ReplicatedStorage.shared.Types.Struct)
 local Union = require(ReplicatedStorage.shared.Types.Union)

@@ -1,5 +1,3 @@
---!strict
-
 type Example = { name: string, hp: number, weapon: string? }
 type Color = "red" | "green" | "blue"
 

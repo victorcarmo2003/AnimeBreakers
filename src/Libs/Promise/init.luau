@@ -1,5 +1,3 @@
---!strict
-
 export type Status = "Pending" | "Fulfilled" | "Rejected" | "Cancelled"
 export type ErrorKind = "ExecutionError" | "AlreadyCancelled" | "NotResolvedInTime" | "TimedOut"
 

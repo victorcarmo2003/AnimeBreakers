@@ -1,4 +1,3 @@
---!strict
 local ContextActionService = game:GetService("ContextActionService")
 local StarterPlayer = game:GetService("StarterPlayer")
 local Modux = require(StarterPlayer.StarterPlayerScripts.client.Modux)

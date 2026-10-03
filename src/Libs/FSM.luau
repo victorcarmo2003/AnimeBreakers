@@ -1,5 +1,3 @@
---!strict
-
 export type Disconnect = () -> ()
 export type TransitionCallback<State> = (previousState: State, nextState: State) -> ()
 export type StateCallback<State> = (state: State, otherState: State) -> ()

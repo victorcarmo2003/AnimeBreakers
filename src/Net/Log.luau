@@ -1,4 +1,3 @@
---!strict
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lync = require(ReplicatedStorage.Packages.Lync)
 

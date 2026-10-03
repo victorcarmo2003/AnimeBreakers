@@ -1,4 +1,3 @@
---!strict
 type Sample = { Coins: number, Name: string }
 
 export type function Of(value: type): type

@@ -1,5 +1,3 @@
---!strict
-
 local Types = require(script.Types)
 
 export type Methods<T> = Types.Methods<T>
