@@ -13,7 +13,7 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 
 | ID | Feature | Fonte | v0 | Bloqueado por |
 |---|---|---|---|---|
-| FEAT-001 | Ilhas temáticas | DEC-003, DEC-014, DEC-025 |  | Q-013 |
+| FEAT-001 | Ilhas temáticas | DEC-003, DEC-014, DEC-025, DEC-035 |  | Q-013 |
 | FEAT-002 | Inimigos em spawn fixo e respawn | DEC-003, DEC-011 | Sim | Q-012, Q-018 |
 | FEAT-003 | Ataque do player | DEC-002 |  | Q-007 |
 | FEAT-004 | Dinheiro (moeda principal) | DEC-002, DEC-011, DEC-021 | Parcial | Q-012 |
@@ -21,11 +21,11 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 | FEAT-006 | Pets: equipar e combater | DEC-004, DEC-020 | Parcial | Q-008, Q-018 |
 | FEAT-007 | Comando por clique/toque | DEC-004, DEC-011, DEC-024 | Sim | — |
 | FEAT-008 | Raridades | DEC-005 |  | Q-010, Q-012 |
-| FEAT-009 | Level e experiência de pet | DEC-006, DEC-027 |  | Q-009 |
+| FEAT-009 | Level e experiência de pet | DEC-006, DEC-027, DEC-030, DEC-033 |  | Q-009 |
 | FEAT-010 | Venda de pets | DEC-006 |  | Q-012 |
 | FEAT-011 | Fusão e estrelas | DEC-007 |  | Q-011 |
 | FEAT-012 | Inventário de pets | DEC-004, DEC-018 | Parcial (só visual) | Q-021 |
-| FEAT-013 | Progressão dentro da ilha e desbloqueio de ilha | DEC-004, DEC-026 |  | Q-013, Q-014, Q-040 |
+| FEAT-013 | Progressão dentro da ilha e desbloqueio de ilha | DEC-004, DEC-026, DEC-035 |  | Q-012, Q-013, Q-014 |
 | FEAT-014 | Ilha inicial como lobby | DEC-009, DEC-014 |  | — |
 | FEAT-015 | UI importada do Figma | DEC-010, DEC-013, DEC-017, DEC-018, DEC-021, DEC-022 | Sim (4 telas) | — |
 | FEAT-016 | Persistência de dados do jogador | implícito no loop |  | — |
@@ -41,9 +41,9 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 | FEAT-026 | Loja | DEC-018 | Parcial (só visual) | Q-015, Q-035 |
 | FEAT-027 | Battle Pass | DEC-018 | Parcial (só visual) | Q-015, Q-035 |
 | FEAT-028 | Bosses | DEC-019, DEC-026 |  | Q-041, Q-018 |
-| FEAT-029 | Missões progressivas | DEC-026, DEC-027 |  | Q-040 |
-| FEAT-030 | Equipamentos de pet (slots) | DEC-026, DEC-027 |  | Q-038 |
-| FEAT-031 | Recursos secundários: gemas, pó estelar, itens de upgrade/merge | DEC-026, DEC-027 |  | Q-039 |
+| FEAT-029 | Missões (principal, secundária, diária) | DEC-026, DEC-027, DEC-029, DEC-034 |  | Q-040 |
+| FEAT-030 | Equipamentos de pet (3 slots) | DEC-026, DEC-027, DEC-031, DEC-032 |  | Q-038 |
+| FEAT-031 | Recursos secundários: gemas, pó estelar, itens de upgrade/merge | DEC-026, DEC-027, DEC-030, DEC-033, DEC-034 |  | Q-039 |
 
 ---
 
@@ -53,7 +53,8 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 - Cada ilha tem: conjunto de inimigos `ENM-###`, um ovo `EGG-##`, spawn points.
 - Ilhas finais e seus modelos são feitos pelo **contratante** (DEC-014, corrige DEC-003). Layout não é responsabilidade dos agentes.
 - No v0: fora; usa o mapa de teste simples numa baseplate, montado pelo usuário (DEC-014).
-- Número de ilhas e desbloqueio: A definir (Q-013).
+- Desbloqueio: passagem paga + gate de vida (DEC-035, ver FEAT-013).
+- Número de ilhas no lançamento: A definir (Q-013).
 
 ## FEAT-002 — Inimigos em spawn fixo e respawn
 
@@ -87,8 +88,10 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
   - Dano conta só até a vida restante (overkill não conta) — **Provisório**.
   - Arredondar para baixo; quem causou dano > 0 recebe no mínimo 1 — **Provisório**.
   - Jogador que saiu do servidor antes da morte perde a parte; ela não é redistribuída — **Provisório**.
+  - O dano de quem saiu **continua contando no denominador** (soma do dano de todos); ele só não recebe (DEC-036, PT-21).
 - Bosses dão mais dinheiro que inimigos comuns (DEC-026; valor em Q-041).
-- Usos: abrir ovos, desbloquear ilhas (Q-013), outros a definir.
+- Usos: abrir ovos, comprar a passagem para a próxima ilha (DEC-035), outros a definir.
+- Fontes além de inimigo/boss: recompensa de missão secundária (DEC-034).
 
 ### No v0 (DEC-021)
 
@@ -137,15 +140,24 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 ## FEAT-009 — Level e experiência de pet
 
 - Pet tem level. Subir level aumenta dano e valor de venda (DEC-006).
-- Pet ganha **experiência ao lutar** (DEC-027). Bosses dão mais experiência (DEC-026).
-- Divisão da XP, level máximo, curva e XP do jogador: A definir (Q-009).
-- Possível relação com pó estelar/itens de upgrade: Q-039.
+- Duas fontes de XP (DEC-033):
+
+| Fonte | Como funciona |
+|---|---|
+| Derrotar inimigos (passiva) | pets ganham XP quando o inimigo que atacaram morre (DEC-027, DEC-033). Bosses dão mais XP (DEC-026) |
+| Pó estelar | jogador escolhe um pet e gasta pó; o pó vira XP daquele pet. Bônus para upar mais rápido ou upar logo um pet recém-adquirido |
+
+- Pó estelar não é sistema separado: é só XP (DEC-033). O level é o mesmo nos dois caminhos.
+- Uso do pó: tela do pet no inventário (FEAT-012), quantidade escolhida pelo jogador — **Provisório**.
+- XP que passa do level máximo com pó: o pó não é consumido além do necessário — **Provisório**.
+- A definir (Q-009): divisão da XP da morte entre pets e jogadores, XP por 1 pó estelar, level máximo, curva, XP do jogador.
 
 ## FEAT-010 — Venda de pets
 
 - Player vende pet por dinheiro.
 - Valor de venda = valor base da raridade × fator de level (forma **Provisória**; números em Q-012).
 - Pet equipado não pode ser vendido sem desequipar (**Provisório**).
+- Equipamentos do pet vendido voltam ao inventário (DEC-032, regra **Provisória**). O mesmo vale para pets consumidos na fusão (FEAT-011).
 - Venda em massa por raridade: **Provisório**, ver Q-021.
 
 ## FEAT-011 — Fusão e estrelas
@@ -176,7 +188,26 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 - Inimigos da ilha vão dos fracos aos fortes.
 - Ciclo: derrotar fracos → abrir ovo da ilha → pets melhores → derrotar fortes.
 - Bosses são opcionais, exceto quando exigidos por missão (DEC-026, FEAT-029).
-- Desbloqueio da próxima ilha: A definir (Q-013). Rebirth: Q-014.
+- Rebirth: Q-014.
+
+### Desbloqueio da próxima ilha (DEC-035)
+
+Duas camadas:
+
+| Camada | Regra | Números |
+|---|---|---|
+| 1. Passagem paga | jogador compra com **dinheiro** a passagem para a próxima ilha. Compra única; fica salva no perfil (FEAT-016) | preço mínimo calibrado; **Provisório** ~5× o dinheiro que o boss final da ilha atual rende ao morrer (Q-012, Q-041) |
+| 2. Gate de vida | inimigos da ilha seguinte têm **muita vida**; com dano baixo, farmar lá não compensa | curva de vida por ilha: A definir (Q-012, `game-designer`) |
+
+- Sem outro requisito: missão **não** destrava ilha (DEC-029), boss **não** é obrigatório (DEC-026).
+- Ilhas em ordem: só compra a passagem da ilha N+1 quem já tem a ilha N — **Provisório**.
+- Ilha já desbloqueada: viagem livre entre ilhas — **Provisório**.
+- Onde se compra a passagem (portal/NPC/UI): **Provisório** portal na borda da ilha com prompt de compra (Q-013).
+- Critérios de aceite (jogo completo):
+  - Sem dinheiro suficiente: compra recusada, dinheiro não muda, mensagem na UI.
+  - Com dinheiro: valor exato descontado, ilha desbloqueada na hora, persiste após sair e voltar.
+  - Passagem comprada não é cobrada de novo.
+- Quantidade de ilhas no lançamento: A definir (Q-013).
 
 ## FEAT-014 — Ilha inicial como lobby
 
@@ -254,7 +285,7 @@ Coluna `v0`: **Sim** = entra no Protótipo de apresentação (DEC-013); **Parcia
 - Uso da habilidade: automático ou manual, conforme o toggle (FEAT-025, DEC-022).
 - Habilidade identificada pelo `PET-###` (1 por personagem). Sem prefixo próprio por enquanto.
 - Ao disparar, a habilidade interrompe a animação de combate em curso (DEC-020). Se o pet estava em Assistência, ele entra em cena para a Skill (**Provisório**).
-- Valores **Provisórios** do v0: 50 de dano, cooldown 8 s, VFX placeholder. O cooldown começa a contar quando o pet chega ao alvo.
+- Valores **Provisórios** do v0: 50 de dano, cooldown 8 s, VFX placeholder. O cooldown conta a partir do **uso** da skill. O pet começa com a skill pronta. Chegar ao alvo, Recall e troca de alvo **não** reiniciam o cooldown (DEC-036, PT-23).
 - No v0: Sim. Critério A9 (alterado por DEC-022): com auto ligado, a habilidade de cada pet dispara sozinha ao fim do cooldown dele e causa dano maior; os slots não respondem a toque.
 
 ## FEAT-023 — Integração de assets do contratante
@@ -315,7 +346,7 @@ Status: **Rascunho**. Inspiração: "luta ensaiada" de Dragon Ball Budokai Tenka
 
 - Qualquer estado → Seguindo quando o alvo morre (DEC-024) ou o player manda parar (FEAT-021).
 - Estados extras (Seguindo, IndoAoAlvo) são do agente, **Provisório**. "Esperando" virou "Assistência" (DEC-023).
-- Duas skills prontas ao mesmo tempo no mesmo jogador: o dano de cada uma sai na hora do disparo; as animações entram em fila, 0,3 s entre cada (**Provisório**).
+- Duas skills prontas ao mesmo tempo no mesmo jogador: os usos entram em fila, 0,3 s entre cada; o dano de cada skill sai 0,4 s depois do próprio uso (**Provisório**, DEC-036, PT-24).
 
 ### No v0 (Provisório)
 
@@ -380,16 +411,49 @@ Status: **Rascunho** (DEC-027).
 
 - Missões progressivas que exigem, cada vez mais, derrotar bosses (DEC-026).
 - Completar missão dá recompensa.
-- Formato (cadeia/lista/diárias), tipos de objetivo, recompensas, o que destravam, quem dá a missão: A definir (Q-040).
+
+Estrutura (DEC-029):
+
+| Categoria | Organização | Ativas ao mesmo tempo |
+|---|---|---|
+| Principal | sequência por ilha | 1 |
+| Secundária | sequência por ilha | 1 |
+| Diária | categoria separada, fora da sequência | 1 |
+
+- Máximo de 3 missões ativas no total (1 por categoria).
+- O jogador pode pular as missões de uma ilha e iniciar as de outra. Não é obrigado a terminar a sequência.
+- Aceitar missão nova da mesma categoria sobrescreve a ativa; a antiga é descartada.
+- Missão descartada (DEC-034): **perde o progresso**; volta a ficar disponível do zero.
+- Missão principal concluída não pode ser refeita: **Provisório** (Q-040 g2).
+- Missão **não** é critério de desbloqueio de ilha (DEC-035).
+
+Recompensas e diárias (DEC-034 — **aprovadas, mas ajustáveis** pelo usuário):
+
+| Categoria | Recompensa | Quantidade |
+|---|---|---|
+| Principal | equipamento e/ou gemas | A definir (Q-012) |
+| Secundária | pó estelar e/ou dinheiro | A definir (Q-012) |
+| Diária | poucas gemas | A definir (Q-012) |
+
+- Diárias: **3 por dia**, reset **00:00 UTC**, 1 ativa por vez.
+- Diária não concluída no reset: some e é trocada pelas novas — **Provisório**.
+- A definir (Q-040): tipos de objetivo (b), se missão destrava algo (d), quem dá a missão (e).
 - Fora do v0.
 
 ## FEAT-030 — Equipamentos de pet
 
 Status: **Rascunho** (DEC-027).
 
-- Cada pet tem **slots de equipamento**.
-- Equipamentos vêm de bosses (DEC-026); outras fontes em Q-038.
-- Número de slots, tipos, efeito, raridade, upgrade e se o equipamento move entre pets: A definir (Q-038).
+- Cada pet tem **3 slots de equipamento** (DEC-031).
+- Tipos dos slots: **Provisório** Arma, Acessório, Amuleto.
+- Efeito: **bônus de status** (DEC-031). Ex.: % de dano, % de velocidade de ataque, redução de cooldown da skill. Sem efeitos especiais.
+- Melhoria: com **pó estelar** (DEC-030). Níveis de melhoria e custo: A definir (Q-038 c).
+- Fontes: bosses (DEC-026) e recompensa de missão principal (DEC-034); outras em Q-038 d.
+- **Troca livre entre pets** (DEC-032): o jogador tira de um pet e coloca em outro, sem custo.
+  - Nível de melhoria fica com o equipamento, não com o pet — **Provisório**.
+  - Um equipamento está em no máximo 1 pet por vez; equipar num slot ocupado devolve o anterior ao inventário — **Provisório**.
+  - Pet vendido ou consumido em fusão: equipamentos voltam ao inventário — **Provisório**.
+- Raridade de equipamento, níveis e custo de melhoria: A definir (Q-038 c).
 - Persistência: entra no perfil do jogador (FEAT-016).
 - Fora do v0.
 
@@ -399,10 +463,11 @@ Status: **Rascunho** (DEC-027).
 
 | Recurso | Fonte conhecida | Uso |
 |---|---|---|
-| Gemas | bosses (DEC-026) | A definir (Q-039) |
-| Pó estelar | bosses (DEC-026) | A definir (Q-039) |
-| Itens de upgrade/merge | bosses (DEC-026) | A definir (Q-039); possível relação com fusão (FEAT-011) e equipamentos (FEAT-030) |
+| Gemas | bosses (DEC-026); compra por Robux (DEC-030); missão principal e diárias (DEC-034); outras em Q-039 d | Moeda **premium** (DEC-030). Gastos **Provisórios**: ovos especiais, slots, boosts (lista final com Q-015) |
+| Pó estelar | bosses (DEC-026); missão secundária (DEC-034); outras em Q-039 d | Melhorar **equipamentos** (FEAT-030) e dar **XP ao pet** escolhido pelo jogador (DEC-033, FEAT-009) |
+| Itens de upgrade/merge | bosses (DEC-026) | A definir (Q-039 c); possível relação com fusão (FEAT-011) |
 
+- "Melhorar pets" vem da transcrição "pause NPCs", interpretada como pets (DEC-030); confirmado por DEC-033 (pó dá XP ao pet).
 - Persistência: entram no perfil do jogador (FEAT-016).
-- Venda por Robux: liga com Q-015.
+- Venda de gemas por Robux: developer product (FEAT-018, Q-015).
 - Fora do v0.

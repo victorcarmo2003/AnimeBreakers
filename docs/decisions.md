@@ -306,3 +306,102 @@ Fora do v0. Entram no jogo completo, como **Rascunho** até as perguntas fechare
   - T-06: pets voltam ao dono (DEC-024).
 - Responde Q-027 quanto ao rig (R6). Origem do modelo placeholder segue Provisória em Q-027.
 - Impacto: `tech/architecture.md` (o `architect` atualiza), FEAT-023, FEAT-024, FEAT-025.
+
+### DEC-029 — 2026-10-03 — Missões: três categorias, uma ativa por categoria
+
+- Três categorias de missão: **principais**, **secundárias** e **diárias**.
+- O jogador tem no máximo **uma missão ativa por categoria** ao mesmo tempo (até 3 ativas no total: 1 principal + 1 secundária + 1 diária).
+- Missões **principais** e **secundárias** formam uma **sequência por ilha**.
+- O jogador **não é obrigado** a terminar as missões de uma ilha. Pode pular e iniciar as missões de outra ilha.
+- Aceitar uma missão nova da mesma categoria **sobrescreve** a ativa. A antiga é descartada.
+- **Diárias** são uma categoria separada, fora da sequência por ilha.
+- Responde Q-040 em parte (item a: formato). Seguem abertos em Q-040: tipos de objetivo, recompensas, o que a missão destrava, quem dá a missão, reset e quantidade de diárias, destino do progresso da missão descartada.
+- Consequência para Q-013: como o jogador pode pular as missões de uma ilha, completar missão provavelmente **não** é o critério de desbloqueio da próxima ilha. Q-013 segue aberta.
+- Impacto: FEAT-029, FEAT-013, Q-013.
+
+### DEC-030 — 2026-10-03 — Gemas premium e uso do pó estelar
+
+- **Gemas**: moeda **premium**. Ganhas no jogo e vendidas por Robux (recomendação de Q-039 aceita).
+  - Onde se gastam: **Provisório**, conforme a recomendação: ovos especiais, slots, boosts. Lista final junto com a monetização (Q-015).
+- **Pó estelar**: serve para **melhorar equipamentos** (FEAT-030) e **melhorar pets**.
+  - Nota de interpretação: a transcrição da fala trouxe "pause NPCs". Registrado como **pets** (contexto: Q-039 perguntava sobre melhorar pet). Se estiver errado, o usuário corrige com nova decisão.
+- Responde Q-039 em parte (itens a e b). Seguem abertos em Q-039: como o pó estelar melhora o pet (relação com level/XP e fusão), itens de upgrade/merge (item c) e fontes além de boss (item d).
+- Impacto: FEAT-031, FEAT-030, FEAT-009, FEAT-018.
+
+### DEC-031 — 2026-10-03 — Equipamentos: 3 slots por pet, bônus de status
+
+- Cada pet tem **3 slots de equipamento** (recomendação de Q-038 aceita).
+  - Tipos dos slots: **Provisório** Arma, Acessório, Amuleto (exemplo da recomendação; nomes podem mudar).
+- Equipamento dá **bônus de status** (recomendação aceita). Ex.: % de dano, % de velocidade de ataque, redução de cooldown da skill. Sem efeitos especiais.
+- Equipamento é melhorado com pó estelar (DEC-030).
+- Responde Q-038 em parte (itens a e b). Seguem abertos em Q-038: raridade de equipamento, fontes além de boss, se o equipamento move entre pets (não respondido pelo usuário).
+- Impacto: FEAT-030.
+
+### DEC-032 — 2026-10-03 — Equipamento troca livremente entre pets
+
+- Equipamento **não fica preso** ao pet. O jogador tira de um pet e coloca em outro **livremente**, sem custo e sem perder melhorias.
+- Responde Q-038 item e (recomendação aceita).
+- Regras de borda **Provisórias** (FEAT-030): equipamento fica com o nível de melhoria ao trocar de pet; vender ou fundir um pet devolve os equipamentos dele ao inventário.
+- Seguem abertos em Q-038: raridade, níveis e custo de melhoria (c) e fontes além de boss (d).
+- Impacto: FEAT-030, FEAT-010, FEAT-011, FEAT-016.
+
+### DEC-033 — 2026-10-03 — Pó estelar dá XP ao pet; XP passiva por derrotar inimigos
+
+- O pó estelar (o usuário fala "pó instelar") dá **experiência** ao pet. O pet sobe de level com essa XP.
+- O jogador **escolhe em qual pet** usar o pó.
+- Pets também ganham XP **passivamente** ao derrotar inimigos (confirma DEC-027).
+- Papel do pó: bônus para upar mais rápido, ou para upar logo pets recém-adquiridos.
+- Pó estelar segue servindo também para melhorar equipamentos (DEC-030).
+- Responde Q-039 item b2 (opção 1, recomendação). Responde Q-009 item a em parte: XP vem de derrotar inimigos. Divisão da XP entre pets participantes segue em Q-009.
+- Conversão pó → XP: **A definir** (Q-009, números com `game-designer`).
+- Seguem abertos em Q-039: itens de upgrade/merge (c) e fontes de gemas e pó (d).
+- Impacto: FEAT-009, FEAT-031.
+
+### DEC-034 — 2026-10-03 — Missões: recompensas, diárias e missão descartada
+
+Recomendações de Q-040 c, f, g aceitas. **Aprovadas, mas ajustáveis**: o usuário pode mudar depois sem que isso seja contradição (nova DEC registra a mudança).
+
+- **Recompensas por categoria (c):**
+
+| Categoria | Recompensa |
+|---|---|
+| Principal | equipamento e/ou gemas |
+| Secundária | pó estelar e/ou dinheiro |
+| Diária | poucas gemas |
+
+- **Diárias (f):** 3 por dia, reset às **00:00 UTC**, uma ativa por vez (DEC-029).
+- **Missão descartada (g):** ao ser substituída, **perde o progresso**; volta a ficar disponível do zero.
+- Quantidades exatas de cada recompensa: A definir (Q-012, `game-designer`).
+- Ainda **Provisório** (não respondido): missão principal concluída não pode ser refeita.
+- Seguem abertos em Q-040: tipos de objetivo (b), o que a missão destrava (d), quem dá a missão (e).
+- Consequência para Q-039 d: missões e diárias passam a ser fonte de gemas e pó estelar.
+- Impacto: FEAT-029, FEAT-031.
+
+### DEC-035 — 2026-10-03 — Desbloqueio de ilha: passagem paga + gate de vida dos inimigos
+
+Duas camadas:
+
+1. **Comprar a passagem** para a próxima ilha com **dinheiro**.
+   - Preço = valor mínimo calibrado. Exemplo do usuário: ~**5×** o dinheiro que o boss final da ilha atual rende ao morrer. **Provisório**.
+2. **Gate natural de progressão**: inimigos da ilha seguinte têm **muita vida**. Com dano baixo, farmar lá não é economicamente viável.
+   - Não há trava de acesso além da passagem; o gate é de balanceamento.
+
+- Balanceamento por **vida** (local, por ilha) + por **dinheiro** (preço da passagem).
+- Missão **não** é critério de desbloqueio (confirma a consequência de DEC-029). Boss não é obrigatório (DEC-026).
+- Passagem comprada fica salva no perfil (FEAT-016).
+- Responde Q-013 em parte (critério de desbloqueio; opção a, com camada extra de vida). Segue aberto: **quantas ilhas** no lançamento.
+- Impacto: FEAT-001, FEAT-013, FEAT-004, Q-012 (curva de vida e preço da passagem por ilha).
+
+### DEC-036 — 2026-10-03 — Propostas técnicas do v0 (PT-21 a PT-25) aceitas
+
+Decisão técnica do `architect` (Revisão 3 de `tech/architecture.md`), resolvendo divergências apontadas pelo QA. **Aceitas para o v0; o usuário pode vetar** (nova DEC registra o veto).
+
+| PT | Regra |
+|---|---|
+| PT-21 | Ledger de dano: o dano de quem sai do servidor **conta no denominador**; quem saiu **não recebe** a parte. |
+| PT-22 | Cada cliente vê **só os números de dano dos próprios pets**. |
+| PT-23 | Cooldown da skill conta a partir do **uso**. Pet começa com a skill **pronta**. Chegada ao alvo, Recall e troca de alvo **não** reiniciam o cooldown. |
+| PT-24 | Dano da skill sai **0,4 s** após o uso (`HitDelay`). Usos do mesmo jogador ficam espaçados **0,3 s** (`SkillGap`). Valores **Provisórios**. |
+| PT-25 | `DevService` existe **só no Studio**, para testes. |
+
+- Impacto: FEAT-004, FEAT-022, FEAT-024, `tech/architecture.md`.

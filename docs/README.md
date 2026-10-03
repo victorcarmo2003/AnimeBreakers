@@ -15,10 +15,10 @@ Bandeira verde quando tudo estiver **Aprovado** e `open-questions.md` sem bloque
 | 4 | Propriedade intelectual e tema das ilhas/personagens | `vision.md` + `story/` | Decidido (DEC-025: originais, tema de gênero) | — |
 | 5 | Combate: player, pets, comando, habilidades, coreografia, multiplayer | `design/features.md` (FEAT-022, 024, 025); `design/combat.md` (a criar) | Rascunho (DEC-020, DEC-022, DEC-023, DEC-024) | Q-007 B, Q-018 B, Q-030, Q-032 B, Q-037 |
 | 6 | Ilhas, inimigos, bosses e assets do contratante (`ISL`, `ENM`) | `design/islands.md`, `design/enemies.md` (a criar) | Rascunho (formato DEC-019, mapa DEC-014, bosses DEC-026) | Q-019, Q-027, Q-036, Q-041 B |
-| 7 | Pets, ovos, raridades e equipamentos (`PET`, `EGG`) | `design/pets.md` (a criar) | Vazio (equipamentos em Rascunho, FEAT-030) | Q-008 B, Q-010 B, Q-021, Q-038 B |
-| 8 | Level/XP de pet, fusão e estrelas | `design/progression.md` (a criar) | Rascunho parcial (XP por combate, DEC-027) | Q-009 B, Q-011 B |
-| 9 | Progressão entre ilhas, missões e rebirth | `design/progression.md` (a criar) | Rascunho parcial (missões DEC-026/027) | Q-013 B, Q-014 B, Q-040 B |
-| 10 | Economia: dinheiro, gemas, pó estelar, custo de ovo, chances, venda | `design/economy.md` (a criar) | Vazio (dinheiro no v0, DEC-021) | Q-012 B, Q-039 B |
+| 7 | Pets, ovos, raridades e equipamentos (`PET`, `EGG`) | `design/pets.md` (a criar) | Vazio (equipamentos em Rascunho: 3 slots, bônus de status, troca livre — DEC-031, DEC-032) | Q-008 B, Q-010 B, Q-021, Q-038 B |
+| 8 | Level/XP de pet, fusão e estrelas | `design/progression.md` (a criar) | Rascunho parcial (XP passiva por derrotar inimigos + pó estelar dá XP, DEC-027, DEC-033) | Q-009 B, Q-011 B, Q-039 B |
+| 9 | Progressão entre ilhas, missões e rebirth | `design/progression.md` (a criar) | Rascunho parcial (missões DEC-029, DEC-034; desbloqueio de ilha por passagem paga + gate de vida DEC-035) | Q-013 B, Q-014 B, Q-040 B |
+| 10 | Economia: dinheiro, gemas, pó estelar, custo de ovo, chances, venda | `design/economy.md` (a criar) | Rascunho parcial (dinheiro no v0 DEC-021; gemas premium e pó estelar DEC-030) | Q-012 B, Q-039 B |
 | 11 | Monetização, Loja, Battle Pass e regras do Roblox (`GP`, `DP`) | `design/monetization.md` (a criar) | Vazio | Q-015 B, Q-035 B |
 | 12 | Social: servidor, trading | `design/features.md` | Vazio | Q-016 B, Q-020 |
 | 13 | UI/UX mobile-first e importação do Figma | `design/features.md` (FEAT-015); `design/ui.md` (a criar) | Rascunho (método DEC-017, telas DEC-018) | — |
@@ -28,7 +28,7 @@ Bandeira verde quando tudo estiver **Aprovado** e `open-questions.md` sem bloque
 | 17 | Arquitetura técnica | `tech/architecture.md` | Rascunho (propostas do v0 aceitas, DEC-028) | Q-036 (T-02) |
 | 18 | Roadmap e prazos | `PIPELINE.md` | Rascunho (v0 liberado, DEC-015) | Q-024 |
 
-Última sessão: 2026-10-03 (rodada 4: DEC-021 a DEC-028).
+Última sessão: 2026-10-03 (rodada 6: DEC-032 a DEC-035 — equipamento troca livre, pó estelar dá XP, recompensas/diárias de missão, desbloqueio de ilha; Q-009, Q-013, Q-038, Q-039, Q-040 respondidas em parte e seguem abertas).
 
 - **Bandeira verde parcial dada para o v0 (DEC-015).** Código do v0 em andamento em paralelo.
 - Bloqueantes para o **jogo completo** (bandeira verde): 17 — Q-007, Q-008, Q-009, Q-010, Q-011, Q-012, Q-013, Q-014, Q-015, Q-016, Q-018, Q-032, Q-035, Q-038, Q-039, Q-040, Q-041.

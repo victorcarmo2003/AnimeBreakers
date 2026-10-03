@@ -143,8 +143,8 @@ Adicionar um movimento novo = mudar o enum no Net + este documento (decisão do 
 | `Power` | number | `5` | dano = `Power × Damage efetivo do pet` (escala com level/estrela de graça). v0: pet de 10 → 50 (FEAT-022) |
 | `Hits` | number? | `1` | dano dividido em N números na tela, espaçados por `HitSpacing` |
 | `HitSpacing` | number? | `0.1` | |
-| `HitDelay` | number | `0.4` | segundos do início da animação `Skill` até o primeiro dano (casa número com impacto) |
-| `Cooldown` | number | `8` | segundos, **por pet** (DEC-022; FEAT-022 Provisório). Começa no cast (beat `Skill`) |
+| `HitDelay` | number | `0.4` | segundos do **próprio** cast (beat `Skill`) até o primeiro dano; casts do mesmo jogador espaçados por `Tuning.SkillGap` (PT-24, `architecture.md` 5.4) |
+| `Cooldown` | number | `8` | segundos, **por pet** (DEC-022; FEAT-022 Provisório). Começa no cast (beat `Skill`); unidade nasce pronta; chegada, recall e troca de alvo não reiniciam (PT-23) |
 | `Effect` | string? | `"SkillBurst"` | VFX no alvo, em `HitDelay` |
 | `CastEffect` | string? | `"SkillCharge"` | VFX no pet, no início |
 

@@ -10,6 +10,11 @@ principais: dinheiro no v0; botão "Forçar" substituído por toggle de auto-ski
 coreografia **por jogador** com categoria de animação **Assist**; alvo morto devolve os pets ao dono;
 placeholder R6.
 
+Revisão 3 (2026-10-03): resolve as divergências levantadas pelo `qa-tester` em `tests/v0-plan.md`
+(PT-21 a PT-25): ledger mantém quem saiu (4.5), números de dano só do próprio jogador (7.3, `Hits`
+privado), cooldown conta do cast com unidade nascendo pronta (5.4), dano da skill `HitDelay` após o
+próprio cast, casts espaçados por `SkillGap` (5.4), mecanismo de dev só no Studio (4.6).
+
 Documentos irmãos:
 
 | Documento | Conteúdo |
@@ -49,6 +54,11 @@ usuário não vetar. ID de PT nunca é reaproveitado.
 | PT-17 | `Engagement` passa a ser **por jogador** (um jogador ↔ um alvo). Dano continua por unidade, agregado no inimigo. Ring de posições continua **por inimigo** (todas as unidades de todos os jogadores), para ninguém ficar em cima de ninguém. | nova | 5.2 |
 | PT-18 | `Beat` vira packet **privado** (`fireClient` só para o dono). Cada client anima o inimigo segundo **a sua** sequência; o modelo do inimigo é local, então não há conflito entre clients. | nova | 5.5 |
 | PT-19 | Pets de **outros** jogadores: só `Assist` em loop no slot do anel (e `Idle`/`Run` fora de combate), sem coreografia, sem VFX de skill. **Provisório** (Q-037). | nova | 5.5 |
+| PT-21 | Ledger de dano **nunca apaga entrada por saída do jogador**. Quem saiu conta no denominador e não recebe (FEAT-004, DEC-021). | nova | 4.5 |
+| PT-22 | Cada client mostra **só os números de dano dos próprios pets**. `Hits` vira packet privado (`fireClient` por dono). Alinha com FEAT-024 "No v0". | nova | 7.3, `network.md` |
+| PT-23 | Cooldown de skill conta **a partir do cast**; a unidade nasce pronta (`SkillReadyAt = 0`); chegada ao alvo, recall e troca de alvo não reiniciam o cooldown. Skill pronta só sai depois da chegada. | nova | 5.4 |
+| PT-24 | "Disparo" de skill = cast (beat `Skill`). Casts do mesmo jogador espaçados por `SkillGap`; o dano de cada skill sai `HitDelay` depois do **próprio** cast. | nova | 5.4 |
+| PT-25 | Mecanismo de dev do servidor (`DevService` + `<Feature>DevService`) ativo só com `RunService:IsStudio()`, acessado pelo Command Bar via `BindableFunction`. | nova | 4.6 |
 | PT-20 | `OwnedPet` já nasce com `Xp` e `Gear` (sem uso no v0) para XP e equipamentos futuros não exigirem migração de forma aninhada. Recompensa de inimigo vira tabela `Rewards` extensível. | nova | `data.md`, `content-data.md` |
 
 ---
@@ -69,7 +79,7 @@ usuário não vetar. ID de PT nunca é reaproveitado.
  │   modelos locais, seguir / anel / Assist  │        │ PetService  unidades equipadas → set Pets    │
  │ CombatController ◄── Beat (privado) ──────┼────────┤ EconomyService  Died → divide Coins          │
  │   coreografia local, reação do inimigo    │        │ ProfileService  Coins, AutoSkill, Pets       │
- │ DamageNumberController ◄── Hits ──────────┼────────┤                                              │
+ │ DamageNumberController ◄── Hits (privado) ┼────────┤                                              │
  │ ProfileController ◄── Profile/Inventory ──┼────────┤                                              │
  │ InterfaceController (Vide) HUD + telas    │        │                                              │
  └───────────────────────────────────────────┘        └──────────────────────────────────────────────┘
@@ -99,6 +109,7 @@ Uma feature = uma pasta. Caminho → DataModel segue o `.rogen.json`
 | `src/Pet` | `PetService` | `PetController` | nova |
 | `src/Combat` | `CombatService` (+ `Engagement`, `Choreography`, `SkillQueue`) | `CommandController`, `CombatController`, `DamageNumberController` | nova |
 | `src/Economy` | `EconomyService` | — | nova (DEC-021) |
+| `src/Dev` | `DevService` (só Studio, 4.6) | — | nova (PT-25); `EnemyDevService`, `EconomyDevService`, `CombatDevService` ficam na pasta `server` da própria feature |
 | `src/Rig` | — | `RigAnimator` (módulo puro, não é Controller) | nova |
 | `src/Effect` | — | `EffectController` | nova |
 | `src/Interface` | — | `InterfaceController`, `Screens/*`, `Components/*` (inclui `PetSlot`) | **estender** |
@@ -138,6 +149,10 @@ src/
     client/CombatController/Stage.luau     palco local: pet em cena + reação do inimigo
     client/DamageNumberController.luau
   Economy/server/EconomyService.luau
+  Economy/server/EconomyDevService.luau     só Studio (4.6)
+  Enemy/server/EnemyDevService.luau         só Studio (4.6)
+  Combat/server/CombatDevService.luau       só Studio (4.6)
+  Dev/server/DevService.luau                só Studio (4.6)
   Rig/RigAnimator/init.luau           compartilhado (shared.Rig.RigAnimator), usado só no client
   Effect/client/EffectController.luau
   Interface/client/
@@ -192,6 +207,8 @@ Prioridade maior roda antes (Loader ordena decrescente; todos os `OnInit` antes 
 | `PetService` | Service | 650 | `PlayerService`, `ProfileService`, `NetService` | monta as unidades a partir de `Equipped`, concede pets iniciais, publica set `Pets`, signals `UnitAdded`/`UnitRemoved` |
 | `CombatService` | Service | 600 | `NetService`, `PlayerService`, `ProfileService`, `EnemyService`, `PetService` | responders `Attack`/`Recall`/`UseSkill`/`SetAutoSkill`, Engagements por jogador, dano, skills, cooldowns, `Hits`, `Beat` |
 | `EconomyService` | Service | 550 | `EnemyService`, `ProfileService`, `NetService` | ao `Died`, divide `Rewards.Coins` pelo ledger e credita `Coins`; dispara `Reward` |
+| `DevService` | Service | 990 | — | só no Studio: `ServerStorage.Dev` + registro de comandos (4.6) |
+| `EnemyDevService`, `EconomyDevService`, `CombatDevService` | Service | 100 | `DevService` + o service da feature | registram comandos de dev da feature (4.6) |
 
 Nenhum Component registra responder (regra do README). `EnemySpawn` só faz `add`/`update`/`remove` no set.
 
@@ -227,6 +244,7 @@ tipado e aparece no painel de propriedades.
 - `TakeDamage(amount, player) -> applied`: aplica `min(amount, Health)` (overkill não conta, FEAT-004),
   soma no ledger, `Enemies:update`. Chegou a 0 → `Alive = false`, avisa `EnemyService` (`Died` com o ledger
   copiado), agenda respawn.
+- O ledger **não** escuta `PlayerRemoving` e nunca apaga entrada antes do respawn (PT-21, ver 4.5).
 - Respawn: depois de `RespawnSeconds`, `Health = MaxHealth`, ledger zerado, `Life += 1`, `Alive = true`.
 - `OnDestroy`: `Enemies:remove(uid)` e desregistra.
 
@@ -267,23 +285,81 @@ Ver seção 5 inteira. Resumo das responsabilidades:
 - Valida comandos: inimigo existe e vivo; personagem do jogador vivo; distância personagem → spawn
   ≤ `Tuning.CommandRange` (Provisório 80 studs); rate limit por jogador (`Tuning.CommandMinInterval`).
 - Mantém `Engagements: { [Player]: Engagement }` e `Rings: { [enemyUid]: { [ring]: unitId } }`.
-- `OnTick` a 20 Hz (PT-14): avança cada Engagement (dano, skills, coreografia), junta hits do tick num
-  `Hits` só e manda os beats de cada jogador só para ele.
+- `OnTick` a 20 Hz (PT-14): avança cada Engagement (dano, skills, coreografia), junta os hits do tick por jogador
+  e manda `Hits` e beats de cada jogador só para ele (PT-18, PT-22).
 - Leash a 2 Hz: dono a mais de `Tuning.LeashRange` (Provisório 120 studs) do alvo → `Recall` automático.
 - `EnemyService.Died` → fecha todos os Engagements daquele inimigo; unidades voltam ao dono (DEC-024).
 
 ### 4.5 Dinheiro: `EconomyService` (DEC-021)
 
 - Escuta `EnemyService.Died(uid, ledger, def)`.
-- `parte = floor(def.Rewards.Coins × dano_do_jogador ÷ soma_do_ledger)`, mínimo 1 se dano > 0; quem saiu
-  do servidor não está mais no ledger (FEAT-004, Provisório). Valor do v0: 100 (DEC-021, Provisório).
+- `parte = floor(def.Rewards.Coins × dano_do_jogador ÷ soma_do_ledger)`, mínimo 1 se dano > 0. Valor do
+  v0: 100 (DEC-021, Provisório).
+- **Quem saiu antes da morte (PT-21, FEAT-004 Provisório):** a entrada continua no ledger, **conta no
+  denominador e não recebe**. Nada é redistribuído.
+  - `soma_do_ledger` = soma de **todas** as entradas, presentes ou não.
+  - Só recebe (e só ganha `Reward`) quem está presente na hora do `Died`: `player.Parent == Players`.
+    O mínimo de 1 vale só para presentes.
+  - Chave do ledger é a instância `Player`. Quem sai e volta é outra instância: a entrada antiga fica
+    ausente (perdida) e o dano novo abre entrada nova. Sem caso especial.
+  - Exemplo (D7 do plano de teste): P1 = 600, P2 = 400, P2 sai → soma 1000 → P1 recebe
+    `floor(100 × 600 ÷ 1000) = 60`; os 40 não vão para ninguém.
+  - Por que não apagar na saída: apagar faria P1 receber 100 (parte de P2 redistribuída), contra
+    FEAT-004/DEC-021. A referência a um `Player` removido vive no máximo até o respawn (ledger zerado).
 - Credita com `profile.Coins(profile.Coins() + parte)` e dispara `Reward` (packet privado) para o popup.
   A HUD mostra o saldo vindo do `Profile` (A17).
 - Fica fora do Combat porque a feature vai crescer (ovos, venda, ilhas, drops de boss) e nenhuma dessas
   coisas é combate.
+- Guarda em memória a última divisão por inimigo (`LastPayout(uid)`: `{ Player, Damage, Present, Share }`),
+  usada pelo mecanismo de dev (4.6).
 - **Extensão futura** (DEC-026/027, fora do v0): a mesma divisão proporcional serve para `Rewards.PetXp`
   (XP distribuída entre as unidades engajadas do jogador) e para `Rewards.Drops` (rolagem por jogador com
   dano > 0). Ambas entram aqui, sem tocar no Combat. Formato em `content-data.md`.
+
+### 4.6 Mecanismo de dev no Studio (PT-25)
+
+O QA precisa chamar serviços do servidor nos casos **S** (`tests/v0-plan.md`). Os serviços do Modux não
+são globais e o Command Bar não enxerga a instância viva. Solução versionada em `src/`, inerte fora do
+Studio, sem acoplamento escondido:
+
+| Módulo | Onde | Priority | Require | Responsabilidade |
+|---|---|---|---|---|
+| `DevService` | `src/Dev/server/DevService.luau` | 990 | — | se `RunService:IsStudio()`, cria `ServerStorage.Dev` (`BindableFunction`) no `OnInit`; `Register(name, handler)`; `OnInvoke(name, ...)` chama o handler em `pcall` e devolve o resultado (erro → `false, mensagem`). Fora do Studio não cria nada e `Register` é no-op |
+| `EnemyDevService` | `src/Enemy/server/EnemyDevService.luau` | 100 | `DevService`, `EnemyService` | comandos de inimigo |
+| `EconomyDevService` | `src/Economy/server/EconomyDevService.luau` | 100 | `DevService`, `EconomyService`, `ProfileService` | comandos de dinheiro |
+| `CombatDevService` | `src/Combat/server/CombatDevService.luau` | 100 | `DevService`, `CombatService`, `PetService` | comandos de combate e skill |
+
+Regras:
+
+- Cada feature registra os próprios comandos no próprio arquivo: nenhuma task edita arquivo de outra, e a
+  dependência é `Require` declarado. Service de jogo nunca requer `DevService`; só os `*DevService`.
+- `Register` só no `OnInit` dos `*DevService`. Nenhum responder Lync, nenhum packet novo.
+- Jogador é passado por **nome** (`"Player1"`); o handler resolve com `Players:FindFirstChild`.
+- Retorno é tabela simples (números, strings, bools), para o QA imprimir no Output.
+- `BindableFunction` em `ServerStorage` não é visível ao client; `IsStudio` impede que exista em produção.
+- Para `FireAs` ser fiel ao pacote real, os responders do `CombatService` são finos: o callback do Lync
+  chama um método público (`HandleAttack(player, data)`, `HandleRecall(player)`,
+  `HandleUseSkill(player, data)`, `HandleSetAutoSkill(player, data)`) e o `FireAs` chama o mesmo método.
+  Validação e rate limit são os mesmos.
+
+Uso no Command Bar do servidor:
+
+```
+game.ServerStorage.Dev:Invoke("Damage", 1, 600, "Player1")
+print(game.ServerStorage.Dev:Invoke("Ledger", 1))
+```
+
+Comandos por task:
+
+| Task | Arquivo | Comandos |
+|---|---|---|
+| TASK-006 | `DevService` + `EnemyDevService` | `Enemies()` → `{ Uid, EnemyId, Health, MaxHealth, Alive, Life }`; `Damage(uid, amount, playerName)` → aplicado; `Kill(uid, playerName)`; `Ledger(uid)` → `{ Name, Damage, Present }` + `Total` |
+| TASK-014 | `EconomyDevService` | `Coins(playerName)`; `SetCoins(playerName, n)`; `LastPayout(uid)` → `{ Name, Damage, Present, Share }` |
+| TASK-015 | `CombatDevService` | `Units(playerName)` → `{ Id, Slot, PetId, Target, Ring, ArriveAt, NextHitAt, SkillReadyAt }`; `Engagement(playerName)` → `{ EnemyUid, Phase, Featured }`; `FireAs(playerName, packet, payload)` para `Attack` e `Recall` |
+| TASK-019 | `CombatDevService` (mesmo arquivo, depois da 015) | `FireAs` aceita também `UseSkill` e `SetAutoSkill`; `Engagement` ganha `Queue`, `LastCastAt`, `PendingHits`; `SetSkillReady(playerName, unitId, at)` |
+
+Simular saída de jogador (D7): fechar a janela do client no Clients and Servers, ou `player:Kick()` no
+Command Bar do servidor. Não há comando de dev para isso.
 
 ---
 
@@ -294,7 +370,7 @@ Ver seção 5 inteira. Resumo das responsabilidades:
 | Camada | Escopo | Quem decide | O que faz | Ligada à animação? |
 |---|---|---|---|---|
 | **Dano básico** | por unidade | servidor | cada unidade chegada causa `Damage` a cada `AttackInterval`, esteja ou não em cena | não |
-| **Skill** | por unidade | servidor | cast por auto (cooldown pronto) ou por pedido manual; dano após `HitDelay` | sim: o cast **é** o beat `Skill` |
+| **Skill** | por unidade | servidor | cast por auto (cooldown pronto) ou por pedido manual; dano `HitDelay` após o próprio cast (PT-24) | sim: o cast **é** o beat `Skill` |
 | **Coreografia** | por jogador | servidor (ordem) + client do dono (pixels) | escolhe o pet "em cena" daquele jogador, a sequência Enter → Combat1 → Combat2 → BackOff, interrupção por Skill | é só isso |
 | **Assist** | por unidade fora de cena | client | loop leve perto do alvo | sem servidor |
 
@@ -377,7 +453,32 @@ no turno normal; quando a skill entra, `Skill → BackOff`. Um pet em cena por v
 
 Duração de cada movimento = `AnimationSet.Tracks[move].Duration` (PT-15). O servidor nunca carrega animação.
 
-### 5.4 Skills: auto e manual (PT-16, DEC-022)
+### 5.4 Skills: auto e manual (PT-16, PT-23, PT-24, DEC-022)
+
+**Cooldown (PT-23), regra única:**
+
+- A unidade nasce com `SkillReadyAt = 0` (pronta).
+- O cooldown começa **no cast** (beat `Skill`): `SkillReadyAt = castAt + Ability.Cooldown`.
+- O relógio corre sempre, em combate ou fora. Chegada ao alvo, `Recall`, troca de alvo e morte do alvo
+  **não** reiniciam nem pausam o cooldown.
+- Skill pronta só entra na fila com a unidade **chegada** (`now ≥ ArriveAt`, passo 1 de 5.3). Na prática,
+  a primeira skill de uma luta sai ~`ArriveSeconds` (0,4 s) depois do `Attack`, se estiver pronta.
+- Por quê: a skill aparece logo na primeira luta da apresentação (A9 visível sem esperar 8 s); trocar de
+  alvo não pune nem recompensa; o servidor guarda um número por unidade. A frase de FEAT-022 "começa a
+  contar quando o pet chega ao alvo" precisa sair (pendência da secretária).
+
+**Momento do dano (PT-24), regra única:**
+
+- "Disparo" = cast = beat `Skill`. O dano da skill sai `Ability.HitDelay` (0,4 s) depois do **próprio**
+  cast, para o número casar com o impacto da animação.
+- Casts do mesmo jogador ficam espaçados por `Tuning.SkillGap` (0,3 s, DEC-022), então o dano de skills
+  prontas ao mesmo tempo também sai espaçado: com 3 prontas, danos em +0,4 s, +0,7 s e +1,0 s.
+- O espaçamento é regra do servidor (fila), não da animação: a animação não atrasa nem adianta dano
+  (DEC-020). Atraso máximo pela fila = `(N − 1) × SkillGap` (0,6 s no v0; 2,1 s com 8 pets). Como o cooldown
+  conta do cast real, não há perda de DPS ao longo da luta.
+- Jogadores diferentes não esperam um ao outro (fila por Engagement).
+- Por que não "dano de todas na hora, só animação em fila" (texto atual de FEAT-024): os números das
+  skills 2 e 3 subiriam antes das animações delas, quebrando o casamento número/impacto que A16 mostra.
 
 | Modo | Quem pede | Validação | Efeito |
 |---|---|---|---|
@@ -426,11 +527,11 @@ Como o client do dono toca um beat (`CombatController`, palco `Stage`):
 **O inimigo com 2+ jogadores atacando** (proposta do v0, PT-18): cada client anima o inimigo segundo a
 **própria** sequência. O modelo é local (PT-01), então o jogador A vê o inimigo defendendo os golpes do
 pet de A, e o jogador B vê o mesmo inimigo defendendo os golpes do pet de B, ao mesmo tempo, sem
-conflito. O que é compartilhado é só o que vem do servidor: vida (`Enemies.Health`), morte, respawn e os
-números de dano de todos (`Hits`). Critério A19 coberto.
+conflito. O que é compartilhado é só o que vem do servidor: vida (`Enemies.Health`), morte e respawn. Os
+números de dano são de cada um (PT-22, 7.3). Critério A19 coberto.
 
-- Client que não está atacando aquele inimigo: o inimigo toca `Idle` (e `Death`/`Spawn` pelo set).
-  Os números de dano dos outros sobem normalmente (com cor neutra), então dá para ver que alguém luta ali.
+- Client que não está atacando aquele inimigo: o inimigo toca `Idle` (e `Death`/`Spawn` pelo set). Quem
+  luta ali aparece pela barra de vida caindo e pelos pets do outro jogador em `Assist` no anel (PT-19).
 
 **Pets de outros jogadores** (PT-19, **Provisório**, Q-037): no client de A, os pets de B ficam no slot do
 anel deles tocando `Assist` em loop enquanto B está engajado; fora de combate, `Idle`/`Run` seguindo B.
@@ -515,7 +616,7 @@ secundários por distância entre posições de spawn no `EnemyService`, ainda s
 | `EnemyController` | Controller | 750 | `EffectController` | set `Enemies` → modelos locais em `Workspace.Visuals.Enemies`, `RigAnimator`, Idle/Death/Spawn, barra de vida (Vide `HealthBar`), `Pick(model) → uid`, `Rig(uid)`, `Health(uid)` source |
 | `PetController` | Controller | 700 | `EnemyController`, `EffectController` | set `Pets` → modelos locais em `Workspace.Visuals.Pets`, movimento e Assist (seção 6), `Rig(unitId)`, `MyUnits` source (com `SkillReadyAt`, `Target`, chegada estimada) |
 | `CombatController` | Controller | 650 | `EnemyController`, `PetController`, `EffectController` | escuta `Beat` (privado) e toca o palco local (5.5): pet em cena, reação do inimigo, teleportes, VFX de skill |
-| `DamageNumberController` | Controller | 640 | `EnemyController`, `PetController` | escuta `Hits`, mostra números (FEAT-020); cor de destaque para os próprios |
+| `DamageNumberController` | Controller | 640 | `EnemyController`, `PetController` | escuta `Hits` (privado: só os próprios), mostra números (FEAT-020, PT-22) |
 | `CommandController` | Controller | 600 | `InputController`, `EnemyController`, `PetController`, `ProfileController` | tap → raycast → `Attack`/`Recall`; `UseSkill(unitId)` (recusa local se auto ligado ou não pronta); `SetAutoSkill(bool)`; `SlotState(unitId)` source para a UI |
 | `InterfaceController` | Controller | 500 | `ProfileController`, `CommandController`, `EnemyController`, `PetController`, `InputController` | `Vide.mount` do ScreenGui no `OnStart`; `Screen` source; troca o contexto do Input para `Menu` quando uma tela cobre o jogo |
 
@@ -534,8 +635,13 @@ Responders de rede só no `OnInit` de Controller. Sets lidos com `onAdded/onChan
 ### 7.3 Números de dano (FEAT-020)
 
 - Pool de `BillboardGui` adornado num `Attachment` no topo do modelo do inimigo (`CharacterDef.Height`).
-- Sobe ~2 studs em 0,8 s com fade, offset horizontal aleatório; `Kind = Skill` maior e com outra cor;
-  dano do próprio jogador com cor de destaque, dos outros com cor neutra.
+- Sobe ~2 studs em 0,8 s com fade, offset horizontal aleatório; `Kind = Skill` maior e com outra cor.
+- **Cada client mostra só os números dos próprios pets** (PT-22, FEAT-024 "No v0"). O servidor manda
+  `Hits` só para o dono das unidades (`network.md`); o client não filtra e não existe cor "neutra".
+- Por quê: segue o design (FEAT-024) e a lógica de "cada um vê a própria luta" (DEC-023); evita tela
+  poluída no mobile com vários jogadores no mesmo inimigo; banda cai de O(jogadores) para O(1) por client.
+  Se o usuário quiser ver os números dos outros (Q-037), volta a ser broadcast com cor neutra, sem mudar
+  o schema.
 - Limite 10 por inimigo e 40 no total (mobile); acima disso recicla o mais antigo.
 - Instâncias + `TweenService`, não árvore Vide por número: efeito efêmero de alta frequência.
 
@@ -628,11 +734,11 @@ Sets Enemies/Pets chegam sozinhos ao client (onAdded) → EnemyController/PetCon
 toque no inimigo → InputController.OnWorldTap → CommandController raycast → Attack { Enemy = uid }
   → CombatService valida → Engagements[player] criado/trocado → unidades: Target, Ring, ArriveAt
   → Pets:update (Target, Ring) → todos os clients: pets vão ao anel e tocam Assist
-tick 20 Hz → dano básico de todas as unidades (Hits para todos)
+tick 20 Hz → dano básico de todas as unidades (Hits de cada jogador só para ele)
           → coreografia do jogador (Beat Enter/Combat1/Combat2/BackOff só para o dono)
   → EnemySpawn:TakeDamage → Enemies:update (Health)
   → client do dono: CombatController anima pet em cena + reação do inimigo local
-  → todos: DamageNumberController mostra Hits; HealthBar lê Health
+  → dono: DamageNumberController mostra os próprios Hits; todos: HealthBar lê Health
 ```
 
 ### 11.3 Skill
@@ -642,7 +748,7 @@ auto ligado:  tick vê SkillReadyAt ≤ now → Queue
 auto desligado: toque no PetSlot → CommandController:UseSkill(unit) → UseSkill { Unit } → valida → Queue
 tick: Queue + SkillGap → Cast → Beat Skill (dono) + PendingHit(HitDelay) + Pets:update (SkillReadyAt)
   → client do dono: corta o pet em cena, teleporta o pet da skill, Skill + VFX, inimigo HitHeavy
-  → HitDelay depois: Hits { Kind = Skill } para todos → Beat BackOff no fim da Skill
+  → HitDelay depois do próprio cast: Hits { Kind = Skill } para o dono → Beat BackOff no fim da Skill
 toggle: SetAutoSkill { Enabled } → profile.AutoSkill → Profile (packet) → HUD (anel verde)
 ```
 
@@ -651,7 +757,8 @@ toggle: SetAutoSkill { Enabled } → profile.AutoSkill → Profile (packet) → 
 ```
 Health = 0 → EnemySpawn: Alive = false → Enemies:update → EnemyService.Died(uid, ledger, def)
   → CombatService fecha os Engagements do inimigo → unidades Target = nil → pets voltam ao dono (DEC-024)
-  → EconomyService divide Rewards.Coins → profile.Coins(+parte) → Profile (packet) + Reward (packet)
+  → EconomyService divide Rewards.Coins (denominador = ledger inteiro, paga só presentes, PT-21)
+  → profile.Coins(+parte) → Profile (packet) + Reward (packet)
   → client: Death anim, modelo some; HUD atualiza Coins; popup "+N"
 RespawnSeconds depois → Alive = true, Health cheia, Life + 1 → client: Spawn anim
 ```
@@ -696,8 +803,8 @@ Cada passo termina com `modux check` + `tools/analyze.ps1` em zero erro.
 4. **B ∥** — `ProfileService`: Template v0 (com `AutoSkill`, `OwnedPet.Xp`/`Gear`), Mock, `Mutate`,
    `Migrations`, `Bind` pelo Template, replicação dividida `Profile`/`Inventory` (`data.md`).
    `ProfileController` com as sources novas.
-5. **B ∥** — `EnemyService` + `EnemySpawn` (vida, ledger, morte, respawn, set `Enemies`). Testável pelo
-   Command Bar do servidor (`ApplyDamage`).
+5. **B ∥** — `EnemyService` + `EnemySpawn` (vida, ledger, morte, respawn, set `Enemies`) + `DevService` e
+   `EnemyDevService` (4.6). Testável pelo Command Bar do servidor (`ServerStorage.Dev`).
 6. **F ∥** — Assets placeholder: R6 sem Humanoid em `assets/roblox/Characters`, entrada no `.rogen.json`,
    animações placeholder publicadas (pet: Idle, Run, Assist, Enter, Combat1, Combat2, Skill, BackOff;
    inimigo: Idle, Defend, Hit, HitHeavy, Death, Spawn). Mapa baseplate com 1–3 Parts `EnemySpawn`.

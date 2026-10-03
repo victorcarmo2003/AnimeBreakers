@@ -8,6 +8,9 @@ Base: seção "Rede" do `README.md` raiz e `tech/architecture.md`. Versão do Ly
 Revisão 2 (2026-10-03): `Profile` ganha `AutoSkill`; saem `ForceSkills` e `ForceCooldown` (DEC-022);
 entram `UseSkill` e `SetAutoSkill` (PT-16); `Beat` vira privado do dono e perde o campo `Enemy` (PT-18).
 
+Revisão 3 (2026-10-03): `Hits` vira **privado do dono** (PT-22, alinha com FEAT-024 "No v0"). Schema igual.
+O mecanismo de dev do Studio (`architecture.md` 4.6) não usa rede.
+
 ## Regras usadas para escolher
 
 | Pergunta | Resposta → escolha |
@@ -40,7 +43,7 @@ Responders: só no `OnInit` de Service/Controller. Nenhum Component registra res
 | `UseSkill` | packet | C → S | nova | `CommandController` | `CombatService` | por toque em slot, só com auto desligado |
 | `SetAutoSkill` | packet | C → S | nova | `CommandController` | `CombatService` | por toque no toggle (raro) |
 | `Beat` | packet `:timestamped()` | S → C (privado, dono) | nova | `CombatService` | `CombatController` | ~1,5–2/s por jogador engajado + 1 por skill |
-| `Hits` | packet (array) | S → todos | nova | `CombatService` | `DamageNumberController` | ≤ 20/s (1 por tick com hit), cada um com N hits |
+| `Hits` | packet (array) | S → C (privado, dono) | nova | `CombatService` | `DamageNumberController` | ≤ 20/s por jogador engajado (1 por tick com hit dele), cada um com N hits |
 | `Vitals` | set | — | **remove** | — | — | — |
 | `Round` | packet | — | **remove** | — | — | — |
 | ~~`ForceSkills`~~ | — | — | **descartada** (DEC-022) | — | — | — |
@@ -294,19 +297,23 @@ Sem payload. Recolhe todas as unidades do jogador e limpa a fila de skills. Rate
 - **Frequência:** por jogador engajado, um turno a cada ~2–3 s ≈ 1,5–2 beats/s, mais 2 por skill
   (`Skill` + `BackOff`).
 
-### `Hits` — packet (array), S → todos (nova)
+### `Hits` — packet (array), S → C privado do dono (nova; PT-22)
 
 ```
 { { Enemy: vlq, Unit: vlq, Amount: vlq, Kind: enum Basic | Skill } } (1..255)
 ```
 
 - **Por que packet:** evento puramente visual (número subindo). O estado (vida) já vem por `Enemies`.
-- **Por que para todos (e não privado como `Beat`):** o inimigo é compartilhado; ver os números dos outros
-  é o que mostra que há mais alguém lutando ali, e o client pinta os próprios em destaque.
-- **Por que array por tick:** o `CombatService` junta todos os hits do tick (de todos os Engagements) num
-  fire só; só dispara se houver hit.
+- **Por que privado (`fireClient` para o dono, como `Beat`):** FEAT-024 "No v0": cada jogador vê só os
+  próprios números (PT-22). Mandar para todos e filtrar no client gastaria banda à toa. Quem mais luta no
+  inimigo aparece pela vida (`Enemies`) e pelos pets em `Assist` no anel (`Pets`).
+- **Por que array por tick:** o `CombatService` junta os hits do tick **por jogador** (o Engagement já é
+  por jogador, PT-17) num fire só para ele; só dispara se houver hit.
+- Se Q-037 pedir os números dos outros: volta a ser broadcast para a `Audience` com o mesmo schema, e o
+  client pinta os alheios em cor neutra (o `Unit` resolve o dono pelo set `Pets`).
 - **Por que não `unreliable`:** o limite de 1000 bytes do modo unreliable estoura no pior caso (255 × ~10 B).
-- **`Unit` e não `Owner`:** o client resolve o dono pelo set `Pets`.
+- **`Unit` e não `Owner`:** o client sabe que são seus; `Unit` diz de qual pet (e mantém o schema pronto
+  para broadcast).
 - Acima de 255 hits num tick (impossível no teto proposto: 96 unidades), o excedente vai no tick seguinte.
 
 ---
@@ -319,13 +326,13 @@ Premissas: 12 jogadores, 8 pets cada (96 unidades), 12 inimigos apanhando ao mes
 | Entrada | Conta | Por client |
 |---|---|---|
 | `Enemies` (Health) | 12 inimigos × 20 Hz × ~8 B | ~1,9 KB/s |
-| `Hits` | (96 + 12 skills/s) × ~10 B | ~1,1 KB/s |
+| `Hits` | só o próprio: (8 + 1 skill/s) × ~10 B | ~0,1 KB/s |
 | `Beat` | só o próprio: (2 + 2) × ~6 B | < 0,1 KB/s |
 | `Pets` (`SkillReadyAt`) | 12/s × ~10 B | ~0,1 KB/s |
 | `Profile` + `Reward` + comandos | ~1 por kill | desprezível |
-| **Total** | | **≈ 3,2 KB/s** (≈ 6,5 KB/s se `AttackInterval` cair para 0,5 s) |
+| **Total** | | **≈ 2,2 KB/s** (≈ 2,4 KB/s se `AttackInterval` cair para 0,5 s) |
 
-Beat privado reduz o custo de coreografia de O(jogadores) para O(1) por client. O orçamento do Lync é
+Beat e Hits privados reduzem o custo de coreografia e de números de O(jogadores) para O(1) por client. O orçamento do Lync é
 32 KB/s por client. Se apertar, a primeira alavanca é reduzir o `update` de `Health` para 10 Hz (a barra de
 vida interpola).
 
