@@ -1,4 +1,4 @@
-# Board
+Em QA (dd81734) |Em QA (3ee92ce) |Em QA (bbfa936; inclui ENM-002 Provisório, P5 parcial) |Em QA (9f098f1; P2 resolvida) |Em QA (e776591) |# Board
 
 Responsável: `task-planner`.
 
@@ -132,6 +132,9 @@ Caminho crítico com UI: depende da data de entrega dos assets da HUD (TASK-013)
 | P3 | Variantes `Lite` dos efeitos (`BlinkOut`, `BlinkIn`, `SkillBurst`, `SkillCharge`) precisam entrar em `src/Shared/Content/Effects.luau` (campo da EffectDef em `content-data.md`). | TASK-012 (critério 2 depende disso) ou follow-up da TASK-003 se o QA da 003 pedir; quem pegar primeiro, uma de cada vez (conflito em `Effects.luau`) | QA TASK-003/TASK-007 |
 | P4 | Resolvida: PT-21..PT-25 registradas em DEC-036; FEAT-004/022/024 alinhados. | secretária | DEC-036 |
 | P5 | DEC-038: mapa de dev do v0 deve ter 1 spawn `ENM-001` + 1 spawn boss `ENM-002` (hoje 3× `ENM-001`); criar EnemyDef/AnimationSet do boss placeholder. Ajustar `assets/roblox/DevMap.rbxm` e `src/Shared/Content/Enemies.luau`. | task-planner | DEC-038 |
+| P6 | ContentService (TASK-004): Loader do Modux roda OnInit em pcall; erro de conteúdo vira warn e o boot segue. Decidir se deve parar o boot. | usuário | TASK-004 |
+| P7 | `src/ModuxTypes/*` gerados pelo `modux generate` contêm `--!strict` (regra DEC-001). Decidir: ajustar gerador ou passo de limpeza. | usuário | DEC-001 |
+| P8 | Mapa: usuário ajustou spawns e apagou a baseplate só na place; `.rogen.json` ainda sincroniza `Workspace.Map` de `DevMap.rbxm`. Decidir: mapa só na place ou versionado. | usuário | DEC-038 |
 
 ---
 
