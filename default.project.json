@@ -51,6 +51,12 @@
 						}
 					}
 				},
+				"Rig": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Rig"
+					}
+				},
 				"Types": {
 					"$ignoreUnknownInstances": false,
 					"$path": {
