@@ -1,6 +1,17 @@
 local Types = require(script.Parent.Types)
 
-const PLACEHOLDER_ID = "rbxassetid://0"
+const R6_IDLE = "rbxassetid://180435571"
+const R6_RUN = "rbxassetid://180426354"
+const R6_JUMP = "rbxassetid://125750702"
+const R6_FALL = "rbxassetid://180436148"
+const R6_CLIMB = "rbxassetid://180436334"
+const R6_SIT = "rbxassetid://178130996"
+const R6_POINT = "rbxassetid://128853357"
+const R6_WAVE = "rbxassetid://128777973"
+const R6_CHEER = "rbxassetid://129423030"
+const R6_TOOL_NONE = "rbxassetid://182393478"
+const R6_TOOL_SLASH = "rbxassetid://129967390"
+const R6_TOOL_LUNGE = "rbxassetid://129967478"
 
 const AnimationSets: { [string]: Types.AnimationSet } = {
 	PetR6 = {
@@ -8,14 +19,14 @@ const AnimationSets: { [string]: Types.AnimationSet } = {
 		Kind = "Pet",
 		Turn = { "Enter", "Combat1", "Combat2", "BackOff" },
 		Tracks = {
-			Idle = { Id = PLACEHOLDER_ID, Duration = 2, Looped = true, Placeholder = true },
-			Run = { Id = PLACEHOLDER_ID, Duration = 0.8, Looped = true, Placeholder = true },
-			Assist = { Id = PLACEHOLDER_ID, Duration = 1.5, Looped = true, Placeholder = true },
-			Enter = { Id = PLACEHOLDER_ID, Duration = 0.25, Placeholder = true },
-			Combat1 = { Id = PLACEHOLDER_ID, Duration = 0.8, Placeholder = true },
-			Combat2 = { Id = PLACEHOLDER_ID, Duration = 0.8, Placeholder = true },
-			Skill = { Id = PLACEHOLDER_ID, Duration = 1.2, Placeholder = true },
-			BackOff = { Id = PLACEHOLDER_ID, Duration = 0.5, Placeholder = true },
+			Idle = { Id = R6_IDLE, Duration = 1, Looped = true, Placeholder = true },
+			Run = { Id = R6_RUN, Duration = 0.667, Looped = true, Placeholder = true },
+			Assist = { Id = R6_POINT, Duration = 1.125, Looped = true, Placeholder = true },
+			Enter = { Id = R6_JUMP, Duration = 0.625, Placeholder = true },
+			Combat1 = { Id = R6_TOOL_SLASH, Duration = 0.5, Placeholder = true },
+			Combat2 = { Id = R6_TOOL_LUNGE, Duration = 1, Speed = 1.5, Placeholder = true },
+			Skill = { Id = R6_CHEER, Duration = 1.042, Placeholder = true },
+			BackOff = { Id = R6_FALL, Duration = 0.65, Looped = false, Placeholder = true },
 		},
 	},
 	PetR6Blue = {
@@ -23,7 +34,7 @@ const AnimationSets: { [string]: Types.AnimationSet } = {
 		Kind = "Pet",
 		Inherits = "PetR6",
 		Tracks = {
-			Combat1 = { Id = PLACEHOLDER_ID, Duration = 0.6, Placeholder = true },
+			Combat1 = { Id = R6_TOOL_LUNGE, Duration = 0.75, Speed = 2, Placeholder = true },
 		},
 	},
 	EnemyR6 = {
@@ -31,12 +42,12 @@ const AnimationSets: { [string]: Types.AnimationSet } = {
 		Kind = "Enemy",
 		Reactions = { Combat1 = "Defend", Combat2 = "Hit", Skill = "HitHeavy" },
 		Tracks = {
-			Idle = { Id = PLACEHOLDER_ID, Duration = 2, Looped = true, Placeholder = true },
-			Defend = { Id = PLACEHOLDER_ID, Duration = 0.5, Placeholder = true },
-			Hit = { Id = PLACEHOLDER_ID, Duration = 0.4, Placeholder = true },
-			HitHeavy = { Id = PLACEHOLDER_ID, Duration = 0.6, Placeholder = true },
-			Death = { Id = PLACEHOLDER_ID, Duration = 1, Placeholder = true },
-			Spawn = { Id = PLACEHOLDER_ID, Duration = 0.8, Placeholder = true },
+			Idle = { Id = R6_IDLE, Duration = 1, Looped = true, Placeholder = true },
+			Defend = { Id = R6_TOOL_NONE, Duration = 0.5, Looped = false, Placeholder = true },
+			Hit = { Id = R6_CLIMB, Duration = 0.458, Looped = false, Placeholder = true },
+			HitHeavy = { Id = R6_JUMP, Duration = 0.625, Placeholder = true },
+			Death = { Id = R6_SIT, Duration = 2, Looped = false, Placeholder = true },
+			Spawn = { Id = R6_WAVE, Duration = 1.5, Placeholder = true },
 		},
 	},
 }
