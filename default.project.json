@@ -100,18 +100,6 @@
 					"$path": {
 						"optional": "src/Profile/server"
 					}
-				},
-				"Round": {
-					"$ignoreUnknownInstances": false,
-					"$path": {
-						"optional": "src/Round/server"
-					}
-				},
-				"Vital": {
-					"$ignoreUnknownInstances": false,
-					"$path": {
-						"optional": "src/Vital/server"
-					}
 				}
 			}
 		},
@@ -158,18 +146,6 @@
 						"$ignoreUnknownInstances": false,
 						"$path": {
 							"optional": "src/Profile/client"
-						}
-					},
-					"Round": {
-						"$ignoreUnknownInstances": false,
-						"$path": {
-							"optional": "src/Round/client"
-						}
-					},
-					"Vital": {
-						"$ignoreUnknownInstances": false,
-						"$path": {
-							"optional": "src/Vital/client"
 						}
 					}
 				}
