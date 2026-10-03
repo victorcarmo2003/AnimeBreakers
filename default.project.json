@@ -17,6 +17,11 @@
 			"shared": {
 				"$className": "Folder",
 				"$ignoreUnknownInstances": false,
+				"Content": {
+					"$path": {
+						"optional": "src/Shared/Content"
+					}
+				},
 				"Libs": {
 					"$ignoreUnknownInstances": false,
 					"$path": {
