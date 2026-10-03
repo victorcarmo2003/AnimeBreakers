@@ -72,6 +72,12 @@
 			"server": {
 				"$className": "Folder",
 				"$ignoreUnknownInstances": false,
+				"Content": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Content/server"
+					}
+				},
 				"Modux": {
 					"$path": {
 						"optional": "src/Modux/server"
