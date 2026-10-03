@@ -1,0 +1,16 @@
+[package]
+name = "hakor/modux-template"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Lync = "axp3cter/lync@4.0.2"
+Charm = "littensy/charm@0.11.0"
+Vide = "centau/vide@0.4.1"
+
+[server-dependencies]
+ProfileStore = "lm-loleris/profilestore@1.0.3"
+
+[dev-dependencies]
+UILabs = "pepeeltoro41/ui-labs@2.4.2"

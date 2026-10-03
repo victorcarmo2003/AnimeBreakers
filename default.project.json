@@ -1,0 +1,166 @@
+{
+	"globIgnorePaths": [
+		"**/*.md"
+	],
+	"name": "ModuxTemplate",
+	"tree": {
+		"$className": "DataModel",
+		"Lighting": {},
+		"ReplicatedFirst": {},
+		"ReplicatedStorage": {
+			"DevPackages": {
+				"$path": "DevPackages"
+			},
+			"Packages": {
+				"$path": "Packages"
+			},
+			"shared": {
+				"$className": "Folder",
+				"$ignoreUnknownInstances": false,
+				"Libs": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Libs"
+					}
+				},
+				"Modux": {
+					"$path": {
+						"optional": "src/Modux/shared"
+					}
+				},
+				"Net": {
+					"$className": "Folder",
+					"$ignoreUnknownInstances": false,
+					"Log": {
+						"$path": {
+							"optional": "src/Net/Log.luau"
+						}
+					}
+				},
+				"Types": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Shared/Types"
+					}
+				},
+				"tablejs": {
+					"$path": {
+						"optional": "src/Shared/tablejs"
+					}
+				}
+			}
+		},
+		"RobloxPluginGuiService": {},
+		"ServerScriptService": {
+			"ServerPackages": {
+				"$path": "ServerPackages"
+			},
+			"server": {
+				"$className": "Folder",
+				"$ignoreUnknownInstances": false,
+				"Modux": {
+					"$path": {
+						"optional": "src/Modux/server"
+					}
+				},
+				"ModuxTypes": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/ModuxTypes/server"
+					}
+				},
+				"Net": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Net/server"
+					}
+				},
+				"Player": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Player/server"
+					}
+				},
+				"Profile": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Profile/server"
+					}
+				},
+				"Round": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Round/server"
+					}
+				},
+				"Vital": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Vital/server"
+					}
+				}
+			}
+		},
+		"ServerStorage": {},
+		"SoundService": {},
+		"StarterGui": {},
+		"StarterPack": {},
+		"StarterPlayer": {
+			"StarterCharacterScripts": {},
+			"StarterPlayerScripts": {
+				"client": {
+					"$className": "Folder",
+					"$ignoreUnknownInstances": false,
+					"Input": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Input/client"
+						}
+					},
+					"Interface": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Interface/client"
+						}
+					},
+					"Modux": {
+						"$path": {
+							"optional": "src/Modux/client"
+						}
+					},
+					"ModuxTypes": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/ModuxTypes/client"
+						}
+					},
+					"Net": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Net/client"
+						}
+					},
+					"Profile": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Profile/client"
+						}
+					},
+					"Round": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Round/client"
+						}
+					},
+					"Vital": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Vital/client"
+						}
+					}
+				}
+			}
+		},
+		"Workspace": {}
+	}
+}

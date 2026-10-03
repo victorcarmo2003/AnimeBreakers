@@ -1,0 +1,31 @@
+{
+	"source": [
+		"src"
+	],
+	"luau": {
+		"output": "default.project.json",
+		"build": "src"
+	},
+	"project": {
+		"name": "ModuxTemplate",
+		"tree": {
+			"$className": "DataModel",
+			"ReplicatedStorage": {
+				"Packages": {
+					"$path": "Packages"
+				},
+				"DevPackages": {
+					"$path": "DevPackages"
+				}
+			},
+			"ServerScriptService": {
+				"ServerPackages": {
+					"$path": "ServerPackages"
+				}
+			}
+		}
+	},
+	"globIgnorePaths": [
+		"**/*.md"
+	]
+}
