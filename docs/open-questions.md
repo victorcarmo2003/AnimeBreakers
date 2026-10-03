@@ -1,13 +1,59 @@
 # Perguntas abertas
 
-`B` = bloqueante para a bandeira verde. Ao responder: mova para "Respondidas" com o `DEC-###`.
+Colunas:
+
+- `B` = bloqueante para a **bandeira verde** do jogo completo.
+- `v0` = bloqueante para o **Protótipo de apresentação (v0)** (DEC-013). `P` = não bloqueia; o v0 segue com valor **Provisório** indicado.
+
+Ao responder: mova para "Respondidas" com o `DEC-###`.
 
 ## Abertas
 
-| ID | B | Tema | Pergunta |
-|---|---|---|---|
+| ID | B | v0 | Tema | Pergunta |
+|---|---|---|---|---|
+| Q-007 | B | P | 5 — Combate do player | O player tem dano próprio? Ele continua batendo depois de ter pets? Opções: a) player tem dano base fixo pequeno e continua podendo bater junto com os pets (rec.); b) player só bate enquanto não tem pet equipado; c) player nunca bate, só comanda; o primeiro pet é dado de graça. Também: como o player ataca (toque no inimigo, botão de ataque, auto-ataque de perto)? v0: player não dá dano (não está no escopo DEC-013). |
+| Q-008 | B | P | 7 — Pets | Quantos pets podem ficar equipados ao mesmo tempo? Opções: a) começa com 3, aumenta por progressão/gamepass até 6–8 (rec.); b) número fixo (ex.: 5); c) sem limite. Botão "equipar melhores"? v0: 3 pets equipados fixos. Atenção: com a coreografia de DEC-020 (1 animação por vez), muitos pets alongam a fila de animação. |
+| Q-009 | B |  | 8 — Level de pet | **Atualizada (DEC-027):** pets ganham XP lutando. Falta: a) XP vem do dano causado ou da morte do inimigo (só pets que participaram)? Rec.: proporcional ao dano, como o dinheiro (DEC-011). b) Level máximo e curva? Rec.: máx. 100, XP por level crescendo ~10% por level (números com `game-designer`). c) O **jogador** também tem XP/level próprio? DEC-026 diz "experiência ao pet/jogador". Opções: c1) só pet (rec., menos sistemas); c2) jogador tem level próprio que libera algo (slots, ilhas). |
+| Q-010 | B |  | 7 — Raridades | Lista final e ordem das raridades. Opções: a) Comum, Incomum, Raro, Épico, Lendário, Mítico (rec.); b) manter Lendário antes de Épico como dito; c) adicionar raridades acima de Mítico (ex.: Secreto). |
+| Q-011 | B |  | 8 — Fusão | Regras numéricas da fusão: cópias por fusão, estrela máxima, multiplicador por estrela. Proposta provisória em FEAT-011. Fusão perde o level dos consumidos? Estrelas diferentes podem ser fundidas? |
+| Q-012 | B | P | 10 — Economia | Números da economia: dinheiro por inimigo e escala, custo do ovo por ilha, chance por raridade, valor de venda, tempo de respawn, vida dos inimigos. Delegável ao `game-designer`. v0: vida, dano e respawn Provisórios em FEAT-002/FEAT-006/FEAT-022; dinheiro do v0 Provisório 100 por inimigo (DEC-021, FEAT-004). |
+| Q-013 | B |  | 9 — Ilhas | Quantas ilhas na versão completa e como desbloqueia a próxima? **Atualizada (DEC-026):** boss não é obrigatório, então "derrotar boss" deixa de ser a recomendação. Opções: a) pagar dinheiro num portal/ponte (rec.); b) completar uma missão da ilha (que pode exigir boss, FEAT-029); c) os dois. Quantas ilhas no lançamento? |
+| Q-014 | B |  | 9 — Rebirth | Existe rebirth? Opções: a) não na v1, avaliar depois (rec.); b) sim, desde a v1; c) não, nunca. |
+| Q-015 | B |  | 11 — Monetização | Quais gamepasses e developer products? Opções: a) pacote padrão do gênero, definido depois do v0 (rec.); b) definir agora junto com a economia; c) sem monetização no lançamento. Ver também DEC-012 (revenue share) e Q-035 (Loja e Battle Pass já desenhados no Figma). |
+| Q-016 | B |  | 12 — Social | Trading de pets? Opções: a) não no lançamento, dados preparados para isso (rec.); b) sim, desde o lançamento; c) nunca. |
+| Q-018 | B | P | 5 — Combate | Inimigos atacam de volta? Player e pets têm vida? Opções: a) não, DPS puro (rec.); b) inimigos atacam pets, que ficam atordoados; c) combate completo com morte do player. v0: inimigo não ataca (escopo DEC-013). Nota: na proposta de DEC-020 o inimigo "simula defesa" ao apanhar — isso é só animação, não ataque. |
+| Q-019 |  |  | 6 — Assets | Direitos sobre os assets. Modelos, mapa e VFX vêm do contratante (DEC-012, DEC-014). Precisa de confirmação escrita de que o contratante tem os direitos e autoriza o uso, registrada em `docs/art/credits.md`. Ligada a Q-005. |
+| Q-020 |  |  | 12 — Servidor | Tamanho máximo do servidor. Recomendação: 12 em mobile. |
+| Q-021 |  |  | 7 — Inventário | Limite de pets no inventário? Recomendação: 50 iniciais, ampliável por gamepass. |
+| Q-023 |  |  | 1 — Referências | Jogos de referência e o que importa de cada um. Candidatos: Pet Simulator 99, Anime Fighters Simulator, Anime Champions Simulator. Já citado pelo usuário: Dragon Ball Budokai Tenkaichi (luta ensaiada, teleportes, combos em sequência — DEC-020). |
+| Q-024 |  |  | 1 — Contratante | Prazo: existe data fixa de publicação do jogo completo? E data para apresentar o v0? A fala de 2026-10-03 ficou ambígua ("publicado mais antes em data fixa ainda"). Registrado como não definido (DEC-012). |
+| Q-027 |  | P | 6 — Assets | Com que modelo construímos o v0 enquanto os assets finais não chegam? **Rig decidido: R6 (DEC-028).** Falta só a origem do modelo. Recomendação Provisória (atualizada por DEC-019): usar os **personagens R6 que o contratante já tem prontos**, se o usuário puder enviá-los; senão, rig R6 padrão do Studio. Todos com AnimationController + Animator e pivô no pé. Animações placeholder feitas no Animation Editor. VFX placeholder com ParticleEmitter simples. Nada de modelo novo no Blender. |
+| Q-030 |  | P | 5 — Comando | Como o player manda os pets pararem? Recomendação Provisória: tocar de novo no mesmo inimigo alterna atacar/parar + botão "Parar" na HUD (se existir no Figma). Ao parar, pets voltam a seguir o player. |
+| Q-032 | B | P | 5 — Combate coreografado | **Depende do contratante aprovar** a proposta de "luta ensaiada" (DEC-020). Pendências: a) estrutura final de animações por personagem (proposta: Combate 1, Combate 2, Skill, Back Off + **Assistência**, nova categoria de DEC-023 — quantas animações de Assistência por personagem e se cada uma tem projétil/VFX); b) inimigo/boss tem animações de "apanhar/defender"? quantas? c) mini teleportes temáticos por personagem (substituição, teleporte instantâneo, passo rápido, aparecer no céu/chão, empurrar, arremessar): cada personagem tem o seu? são animação + VFX do contratante ou movimento feito por código? d) duração de cada animação. v0: estados Combate 1 → Combate 2 → Skill → Back Off com animações placeholder; teleporte = reposicionamento instantâneo simples. |
+| Q-035 | B |  | 11 — Monetização | O Figma tem telas de **Loja** e **Battle Pass** (DEC-018). a) O Battle Pass existe no jogo completo? Grátis + premium por Robux? Duração da temporada? b) O que a Loja vende (Robux por gamepass/produto, dinheiro do jogo por itens, ovos)? Recomendação: decidir junto com Q-015, depois do v0; o v0 mostra as telas só visuais. |
+| Q-036 |  |  | 6 — Assets | Restos de Q-025 (o item a é também a dúvida T-02 do `architect`): a) **dono das animações**: no Roblox, animação só toca se pertencer ao dono do jogo (conta ou grupo). Quem publica? Recomendação: jogo publicado num grupo; animações e imagens da UI publicadas nesse grupo. b) formato dos **VFX** do contratante (ParticleEmitter/Beam/Trail em .rbxm?). c) Um **pacote de amostra** (1 personagem R6 + animações + 1 VFX) pode chegar antes? Sem ele o critério A13 não é verificado com asset real. |
+| Q-037 |  | P | 5 — Combate coreografado | Com a coreografia por jogador (DEC-023), como os **pets de outros jogadores** aparecem no mesmo inimigo, na minha tela? Opções: a) aparecem no anel ao redor do alvo, só com animação de Assistência, nunca entram em cena na minha tela (rec.); b) ficam invisíveis/transparentes enquanto eu ataco o mesmo inimigo; c) aparecem sem animar, parados perto do dono. E os números de dano dos outros: a) só os meus aparecem (rec., menos poluição no mobile); b) todos, os dos outros menores e apagados. Provisório do v0: opção a nas duas. |
+| Q-038 | B |  | 7 — Equipamentos | Equipamentos de pet (DEC-027, FEAT-030). a) Quantos slots por pet? Rec.: 3 fixos (ex.: Arma, Acessório, Amuleto). Alternativa: slots que abrem por estrela/level. b) Efeito: só bônus de status (% de dano, % de velocidade de ataque, redução de cooldown da skill) (rec.) ou também efeitos especiais? c) Equipamento tem raridade e pode ser melhorado (com pó estelar/itens de upgrade)? d) Fonte: só boss (DEC-026) ou também missão/loja? e) Equipamento é preso ao pet ou move livremente entre pets? Rec.: move livremente. |
+| Q-039 | B |  | 10 — Economia | Recursos secundários (DEC-026, DEC-027, FEAT-031). a) **Gemas**: para que servem? Rec.: moeda premium do jogo (ovos especiais, slots, boosts), ganhas em boss/missão e vendidas por Robux. b) **Pó estelar**: para que serve? Rec.: melhorar equipamento e/ou subir level de pet. c) **Itens de upgrade/merge**: o que são e como se relacionam com a fusão de pets (FEAT-011, DEC-007)? Ex.: item que substitui uma cópia na fusão, ou item que melhora equipamento. d) Além de boss, de onde vêm (missão, inimigo comum com chance baixa, loja)? |
+| Q-040 | B |  | 9 — Missões | Estrutura das missões (DEC-027, FEAT-029). a) Formato: cadeia linear por ilha, uma por vez (rec.); lista de várias ativas; diárias/semanais além da cadeia? b) Tipos de objetivo além de derrotar boss: matar N inimigos, abrir N ovos, fundir pet, juntar dinheiro? c) Recompensa por missão: dinheiro, gemas, pó estelar, equipamento, pet exclusivo? d) Missão destrava algo (próxima ilha, slot de pet, slot de equipamento)? Liga com Q-013 e Q-008. Quem dá a missão: NPC na ilha ou só tela de UI (existe tela no Figma)? |
+| Q-041 | B |  | 6 — Bosses | Detalhes de boss (DEC-026, FEAT-028). a) Onde e quando aparece: spawn fixo na ilha com respawn longo (rec., ex.: 5 min), ou invocado pelo jogador/missão? b) Quantos bosses por ilha? Rec.: 1–2. c) Vida e recompensa: múltiplo do inimigo mais forte da ilha? Rec.: vida ×10, dinheiro e XP ×10 (números com `game-designer`). d) Drop: tabela com chance por item, dividida por dano como o dinheiro (DEC-011), ou cada participante rola o drop sozinho (rec.)? Se boss ataca: Q-018. |
 
 ## Respondidas
 
 | ID | Resposta | Decisão |
 |---|---|---|
+| Q-001 | Simulador de DPS com temática anime, estilo pet simulator: bater → dinheiro → ovos → pets que lutam por comando de clique. Ilhas temáticas, inimigos fixos. | DEC-002, DEC-003, DEC-004 |
+| Q-003 | PC e mobile, prioridade mobile. Público 10–16 anos, fãs de anime. | DEC-008 |
+| Q-006 | Opção a: inimigos compartilhados; cada jogador recebe dinheiro proporcional ao dano causado. | DEC-011 |
+| Q-002 | Jogo completo publicado; data não definida (Q-024); remuneração por porcentagem (revenue share); modelos e VFX vêm prontos do contratante; mapa ainda não existe. | DEC-012 |
+| Q-004 | Protótipo de apresentação (v0): inimigo parado com dano e respawn, pets atacam alvo tocado, comando parar, números de dano em BillboardGui, animações e habilidades, UI do Figma. | DEC-013 |
+| Q-029 | Contratante (modelador e PM) faz mapa e modelos; usuário monta mapa de teste numa baseplate. Corrige DEC-003. | DEC-014 |
+| Q-028 | Bandeira verde parcial: código do v0 começa já, em paralelo ao mapeamento. | DEC-015 |
+| Q-026 | Ataque automático + 1 habilidade própria por personagem com recarga; botão "forçar" faz todos os pets usarem a habilidade ao mesmo tempo. | DEC-016 |
+| Q-017 | PNGs dos elementos + JSON da estrutura + foto de referência por tela; agente monta e usuário direciona ajustes. | DEC-017 |
+| Q-022 | v0 importa HUD principal, Inventário, Loja e Battle Pass; só o HUD tem features reais. | DEC-018 |
+| Q-025 | R6 na maioria; bosses rig custom; AnimationController + Animator; LoadAnimation; pivô no pé; animações ainda em produção. Restos em Q-036. | DEC-019 |
+| Q-031 | Perdeu o objeto: botão "forçar" removido. Cada pet tem cooldown próprio; toggle de uso automático; com auto desligado, toque no slot do pet usa a skill. | DEC-022 |
+| Q-033 | Coreografia por jogador; pets fora de cena fazem animação de Assistência perto do alvo; item c perdeu o objeto (DEC-022). Pets de outros jogadores: Q-037. | DEC-023 |
+| Q-005 | Opção a: personagens originais inspirados em arquétipos de anime; ilhas com tema de gênero; obras citadas eram só referência. Regra do `CLAUDE.md` mantida. | DEC-025 |
+| Q-034 | Bosses opcionais, mais fortes, mais XP e dinheiro; exigidos por missões progressivas; dropam equipamento, gemas, pó estelar, itens de upgrade/merge. Detalhes em Q-041. | DEC-026 |

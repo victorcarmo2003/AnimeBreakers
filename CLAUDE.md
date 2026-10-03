@@ -6,6 +6,8 @@ Jogo de Roblox com temática anime. Conceito, gênero e escopo ainda em mapeamen
 
 ## Fase atual: 0 — Pré-produção
 
+> **Bandeira verde parcial (DEC-015):** o código do Protótipo v0 (DEC-013) está liberado e roda em paralelo ao mapeamento. O resto do jogo segue a regra abaixo até a bandeira verde completa.
+
 Estamos mapeando o jogo inteiro antes de construir. Regra da fase:
 
 - **Nenhum código de gameplay** em `src/` até o usuário dar a **bandeira verde** (registrada em `docs/decisions.md`).
@@ -54,6 +56,12 @@ Tudo que é referenciado entre documentos tem ID estável. Nunca reaproveite um 
 | `AST-###` | asset 3D/visual | `docs/art/asset-list.md` |
 | `CHR-###` | personagem | `docs/story/characters.md` |
 | `LVL-##` | fase/mapa/área | `docs/levels/LVL-##.md` |
+| `ISL-##` | ilha (mapa temático) | `docs/design/islands.md` |
+| `ENM-###` | inimigo | `docs/design/enemies.md` |
+| `PET-###` | pet (personagem obtido em ovo) | `docs/design/pets.md` |
+| `EGG-##` | ovo/caixa | `docs/design/pets.md` |
+| `GP-##` | gamepass | `docs/design/monetization.md` |
+| `DP-##` | developer product | `docs/design/monetization.md` |
 
 Prefixos específicos do jogo (habilidades, inimigos, itens, etc.) são criados pela secretária conforme o
 design for definido, e registrados nesta tabela.
