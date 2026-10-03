@@ -72,6 +72,18 @@
 			"server": {
 				"$className": "Folder",
 				"$ignoreUnknownInstances": false,
+				"Dev": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Dev/server"
+					}
+				},
+				"Enemy": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Enemy/server"
+					}
+				},
 				"Modux": {
 					"$path": {
 						"optional": "src/Modux/server"
