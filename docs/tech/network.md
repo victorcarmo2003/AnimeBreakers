@@ -140,6 +140,10 @@ Pontos a confirmar no Studio no passo 1 (o schema só é validado em runtime, de
 
 Se algum falhar, a alternativa já está indicada na entrada correspondente.
 
+Resultado (2026-10-03): as três assinaturas existem no fonte do Lync 4.0.2 (verificado na TASK-002). Play solo no Studio
+com o Net do v0: `Lync.start()` sem erro de schema no servidor e no client (boot do Modux limpo nos dois lados).
+O teste de runtime de `Lync.none` e `sent` no `fireClient` fica para o QA da TASK-028, via DevService.
+
 ---
 
 ## Entradas

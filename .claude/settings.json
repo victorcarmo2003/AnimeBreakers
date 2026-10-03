@@ -1,4 +1,7 @@
 {
+  "worktree": {
+    "symlinkDirectories": ["Packages", "ServerPackages", "DevPackages"]
+  },
   "hooks": {
     "PreToolUse": [
       {
