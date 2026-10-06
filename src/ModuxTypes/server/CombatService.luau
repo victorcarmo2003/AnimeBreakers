@@ -1,11 +1,14 @@
 --!strict
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local Content = require(ReplicatedStorage.shared.Content)
 local PetTypes = require(ServerScriptService.server.ModuxTypes.PetService)
 local Engagement = require(ServerScriptService.server.Combat.CombatService.Engagement)
 
 export type PetUnit = PetTypes.PetUnit
 export type Engagement = Engagement.Engagement
+export type Move = Content.Move
 export type Hit = {
 	Enemy: number,
 	Unit: number,
@@ -17,7 +20,7 @@ export type HitKind = "Basic" | "Skill"
 export type Public = {
 	Engagements: { [Player]: Engagement },
 	LastCommandAt: { [Player]: number },
-	PendingHits: { [Player]: { Hit } },
+	OutgoingHits: { [Player]: { Hit } },
 	Random: Random,
 	Rings: { [number]: { [number]: number } },
 	Setup: (self: Public) -> (),
@@ -32,6 +35,18 @@ export type Public = {
 	CloseEnemy: (self: Public, enemyUid: number) -> (),
 	HandleAttack: (self: Public, player: Player, data: unknown) -> boolean,
 	HandleRecall: (self: Public, player: Player) -> boolean,
+	IsAutoSkill: (self: Public, player: Player) -> boolean,
+	HandleUseSkill: (self: Public, player: Player, data: unknown) -> boolean,
+	HandleSetAutoSkill: (self: Public, player: Player, data: unknown) -> boolean,
+	IsCurrent: (self: Public, engagement: Engagement) -> boolean,
+	SendBeat: (self: Public, player: Player, unitId: number, move: Move) -> (),
+	BeatEmitter: (self: Public, player: Player) -> (unitId: number, move: Move) -> (),
+	EnqueueAutoSkills: (self: Public, engagement: Engagement, at: number) -> (),
+	Cast: (self: Public, engagement: Engagement, unit: PetUnit, at: number) -> (),
+	CastNext: (self: Public, engagement: Engagement, at: number) -> (),
+	ApplyPendingHits: (self: Public, engagement: Engagement, at: number) -> (),
+	Choreograph: (self: Public, engagement: Engagement, at: number) -> (),
+	Advance: (self: Public, engagement: Engagement, at: number) -> (),
 	QueueHit: (self: Public, player: Player, hit: Hit) -> (),
 	StrikeBasic: (self: Public, engagement: Engagement, at: number) -> (),
 	FlushHits: (self: Public) -> (),
