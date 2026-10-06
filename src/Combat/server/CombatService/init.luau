@@ -4,10 +4,14 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Content = require(ReplicatedStorage.shared.Content)
 local PetTypes = require(ServerScriptService.server.ModuxTypes.PetService)
 local Engagement = require(script.Engagement)
+local SkillQueue = require(script.SkillQueue)
+local Choreography = require(script.Choreography)
 local Modux = require(ServerScriptService.server.Modux)
 
 export type PetUnit = PetTypes.PetUnit
 export type Engagement = Engagement.Engagement
+export type PendingHit = Engagement.PendingHit
+export type Move = Content.Move
 
 export type HitKind = "Basic" | "Skill"
 
@@ -24,7 +28,7 @@ const LEASH_CHECK_RATE = 2
 
 const CombatService = Modux.Service(
 	"CombatService",
-	{ Require = { "NetService", "PlayerService", "EnemyService", "PetService" }, Priority = 600 }
+	{ Require = { "NetService", "PlayerService", "ProfileService", "EnemyService", "PetService" }, Priority = 600 }
 )
 
 local function aliveRoot(player: Player): BasePart?
@@ -54,7 +58,7 @@ function CombatService:Setup()
 	self.Engagements = {} :: { [Player]: Engagement }
 	self.Rings = {} :: { [number]: { [number]: number } }
 	self.LastCommandAt = {} :: { [Player]: number }
-	self.PendingHits = {} :: { [Player]: { Hit } }
+	self.OutgoingHits = {} :: { [Player]: { Hit } }
 	self.Random = Random.new() :: Random
 end
 
@@ -219,11 +223,199 @@ function CombatService:HandleRecall(player: Player): boolean
 	return true
 end
 
+function CombatService:IsAutoSkill(player: Player): boolean
+	const profile = self.Dependencies.ProfileService:Get(player)
+	return profile ~= nil and profile.AutoSkill()
+end
+
+function CombatService:HandleUseSkill(player: Player, data: unknown): boolean
+	if not self:PassRateLimit(player) then
+		return false
+	end
+	if typeof(data) ~= "table" then
+		return false
+	end
+	const unitId = (data :: { [string]: unknown }).Unit
+	if typeof(unitId) ~= "number" then
+		return false
+	end
+
+	const unit = self.Dependencies.PetService:Unit(unitId)
+	if unit == nil or unit.Owner ~= player then
+		return false
+	end
+	if self.Dependencies.ProfileService:Get(player) == nil or self:IsAutoSkill(player) then
+		return false
+	end
+
+	const at = now()
+	if at < unit.SkillReadyAt then
+		return false
+	end
+
+	const engagement = self.Engagements[player]
+	if engagement == nil then
+		return false
+	end
+	const enemy = self.Dependencies.EnemyService:Get(engagement.EnemyUid)
+	if enemy == nil or not enemy.Alive then
+		return false
+	end
+	if not Choreography.IsOnStage(engagement, unit, at) then
+		return false
+	end
+
+	return SkillQueue.Push(engagement.Queue, unit.Id)
+end
+
+function CombatService:HandleSetAutoSkill(player: Player, data: unknown): boolean
+	if not self:PassRateLimit(player) then
+		return false
+	end
+	if typeof(data) ~= "table" then
+		return false
+	end
+	const enabled = (data :: { [string]: unknown }).Enabled
+	if typeof(enabled) ~= "boolean" then
+		return false
+	end
+	const profile = self.Dependencies.ProfileService:Get(player)
+	if profile == nil then
+		return false
+	end
+	profile.AutoSkill(enabled)
+	return true
+end
+
+function CombatService:IsCurrent(engagement: Engagement): boolean
+	return self.Engagements[engagement.Owner] == engagement
+end
+
+function CombatService:SendBeat(player: Player, unitId: number, move: Move)
+	const net = self.Dependencies.NetService
+	if not net:IsRunning() or player.Parent ~= Players or not net:IsReady(player) then
+		return
+	end
+	self.Libs.Net.Beat:fireClient(player, { Unit = unitId, Move = move })
+end
+
+function CombatService:BeatEmitter(player: Player): (unitId: number, move: Move) -> ()
+	return function(unitId: number, move: Move)
+		self:SendBeat(player, unitId, move)
+	end
+end
+
+function CombatService:EnqueueAutoSkills(engagement: Engagement, at: number)
+	if not self:IsAutoSkill(engagement.Owner) then
+		return
+	end
+	const pets = self.Dependencies.PetService
+	const ready: { PetUnit } = {}
+	for _, unitId in engagement.Units do
+		const unit = pets:Unit(unitId)
+		if unit == nil or at < unit.SkillReadyAt or SkillQueue.Contains(engagement.Queue, unitId) then
+			continue
+		end
+		if Choreography.IsOnStage(engagement, unit, at) then
+			table.insert(ready, unit)
+		end
+	end
+	table.sort(ready, function(left: PetUnit, right: PetUnit)
+		return left.Slot < right.Slot
+	end)
+	for _, unit in ready do
+		SkillQueue.Push(engagement.Queue, unit.Id)
+	end
+end
+
+function CombatService:Cast(engagement: Engagement, unit: PetUnit, at: number)
+	const ability = Content.Ability(unit.AbilityId)
+	Choreography.CastSkill(engagement, unit, at, self:BeatEmitter(engagement.Owner))
+	engagement.LastCastAt = at
+
+	const hits = math.max(1, ability.Hits or 1)
+	const spacing = ability.HitSpacing or 0
+	const total = math.floor(ability.Power * unit.Damage)
+	const share = math.floor(total / hits)
+	for index = 1, hits do
+		const amount = if index == hits then total - share * (hits - 1) else share
+		if amount > 0 then
+			Engagement.SchedulePendingHit(engagement, {
+				At = at + ability.HitDelay + spacing * (index - 1),
+				Unit = unit.Id,
+				Amount = amount,
+				Kind = "Skill",
+			})
+		end
+	end
+
+	self.Dependencies.PetService:SetSkillReady(unit, at + ability.Cooldown)
+end
+
+function CombatService:CastNext(engagement: Engagement, at: number)
+	if SkillQueue.IsEmpty(engagement.Queue) or at < engagement.LastCastAt + Content.Tuning.SkillGap then
+		return
+	end
+	const pets = self.Dependencies.PetService
+	while true do
+		const unitId = SkillQueue.Pop(engagement.Queue)
+		if unitId == nil then
+			return
+		end
+		const unit = pets:Unit(unitId)
+		if
+			unit ~= nil
+			and unit.Owner == engagement.Owner
+			and at >= unit.SkillReadyAt
+			and Choreography.IsOnStage(engagement, unit, at)
+		then
+			self:Cast(engagement, unit, at)
+			return
+		end
+	end
+end
+
+function CombatService:ApplyPendingHits(engagement: Engagement, at: number)
+	const enemies = self.Dependencies.EnemyService
+	const owner = engagement.Owner
+	const enemyUid = engagement.EnemyUid
+	for _, hit in Engagement.TakeDueHits(engagement, at) do
+		const applied = enemies:ApplyDamage(enemyUid, hit.Amount, owner)
+		if applied > 0 then
+			self:QueueHit(owner, { Enemy = enemyUid, Unit = hit.Unit, Amount = applied, Kind = hit.Kind })
+		end
+		if not self:IsCurrent(engagement) then
+			return
+		end
+	end
+end
+
+function CombatService:Choreograph(engagement: Engagement, at: number)
+	const pets = self.Dependencies.PetService
+	Choreography.Step(engagement, at, function(unitId: number)
+		return pets:Unit(unitId)
+	end, self:BeatEmitter(engagement.Owner))
+end
+
+function CombatService:Advance(engagement: Engagement, at: number)
+	self:StrikeBasic(engagement, at)
+	if not self:IsCurrent(engagement) then
+		return
+	end
+	self:EnqueueAutoSkills(engagement, at)
+	self:CastNext(engagement, at)
+	self:ApplyPendingHits(engagement, at)
+	if not self:IsCurrent(engagement) then
+		return
+	end
+	self:Choreograph(engagement, at)
+end
+
 function CombatService:QueueHit(player: Player, hit: Hit)
-	local pending = self.PendingHits[player]
+	local pending = self.OutgoingHits[player]
 	if pending == nil then
 		pending = {}
-		self.PendingHits[player] = pending
+		self.OutgoingHits[player] = pending
 	end
 	table.insert(pending, hit)
 end
@@ -259,18 +451,18 @@ function CombatService:FlushHits()
 	const net = self.Dependencies.NetService
 	const running = net:IsRunning()
 
-	for player, pending in self.PendingHits do
+	for player, pending in self.OutgoingHits do
 		if not running or player.Parent ~= Players or not net:IsReady(player) then
-			self.PendingHits[player] = nil
+			self.OutgoingHits[player] = nil
 			continue
 		end
 		if #pending <= MAX_HITS_PER_PACKET then
-			self.PendingHits[player] = nil
+			self.OutgoingHits[player] = nil
 			self.Libs.Net.Hits:fireClient(player, pending)
 			continue
 		end
 		const batch = table.move(pending, 1, MAX_HITS_PER_PACKET, 1, {})
-		self.PendingHits[player] = table.move(pending, MAX_HITS_PER_PACKET + 1, #pending, 1, {})
+		self.OutgoingHits[player] = table.move(pending, MAX_HITS_PER_PACKET + 1, #pending, 1, {})
 		self.Libs.Net.Hits:fireClient(player, batch)
 	end
 end
@@ -289,7 +481,7 @@ function CombatService:Step()
 			table.insert(stale, player)
 			continue
 		end
-		self:StrikeBasic(engagement, at)
+		self:Advance(engagement, at)
 	end
 
 	for _, player in stale do
@@ -347,7 +539,7 @@ end
 function CombatService:Forget(player: Player)
 	self:Disengage(player)
 	self.LastCommandAt[player] = nil
-	self.PendingHits[player] = nil
+	self.OutgoingHits[player] = nil
 end
 
 CombatService:OnInit(function(self)
@@ -359,6 +551,12 @@ CombatService:OnInit(function(self)
 	end)
 	net.Recall:onServer(function(_, player)
 		self:HandleRecall(player)
+	end)
+	net.UseSkill:onServer(function(data, player)
+		self:HandleUseSkill(player, data)
+	end)
+	net.SetAutoSkill:onServer(function(data, player)
+		self:HandleSetAutoSkill(player, data)
 	end)
 
 	self.Dependencies.EnemyService.Died:Connect(function(uid)
