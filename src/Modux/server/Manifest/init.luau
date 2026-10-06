@@ -7,6 +7,7 @@ local EnemyDevService = require(ServerScriptService.server.ModuxTypes.EnemyDevSe
 local EnemyService = require(ServerScriptService.server.ModuxTypes.EnemyService)
 local EnemySpawn = require(ServerScriptService.server.ModuxTypes.EnemySpawn)
 local NetService = require(ServerScriptService.server.ModuxTypes.NetService)
+local PetService = require(ServerScriptService.server.ModuxTypes.PetService)
 local PlayerService = require(ServerScriptService.server.ModuxTypes.PlayerService)
 local ProfileService = require(ServerScriptService.server.ModuxTypes.ProfileService)
 
@@ -16,6 +17,7 @@ export type AllServices = {
 	EnemyDevService: EnemyDevService.Public,
 	EnemyService: EnemyService.Public,
 	NetService: NetService.Public,
+	PetService: PetService.Public,
 	PlayerService: PlayerService.Public,
 	ProfileService: ProfileService.Public,
 }
