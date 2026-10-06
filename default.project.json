@@ -119,6 +119,12 @@
 						"optional": "src/Net/server"
 					}
 				},
+				"Pet": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Pet/server"
+					}
+				},
 				"Player": {
 					"$ignoreUnknownInstances": false,
 					"$path": {
