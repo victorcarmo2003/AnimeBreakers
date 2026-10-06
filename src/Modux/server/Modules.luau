@@ -3,6 +3,8 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 
 return {
+	ServerScriptService.server.Combat.CombatDevService,
+	ServerScriptService.server.Combat.CombatService,
 	ServerScriptService.server.Content.ContentService,
 	ServerScriptService.server.Dev.DevService,
 	ServerScriptService.server.Economy.EconomyDevService,
