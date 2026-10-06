@@ -1,11 +1,13 @@
 --!strict
 
 local StarterPlayer = game:GetService("StarterPlayer")
+local EffectController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.EffectController)
 local InputController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.InputController)
 local NetController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.NetController)
 local ProfileController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.ProfileController)
 
 export type AllControllers = {
+	EffectController: EffectController.Public,
 	InputController: InputController.Public,
 	NetController: NetController.Public,
 	ProfileController: ProfileController.Public,

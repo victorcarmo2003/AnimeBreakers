@@ -137,6 +137,12 @@
 				"client": {
 					"$className": "Folder",
 					"$ignoreUnknownInstances": false,
+					"Effect": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Effect/client"
+						}
+					},
 					"Input": {
 						"$ignoreUnknownInstances": false,
 						"$path": {
