@@ -190,6 +190,12 @@
 							"optional": "src/Net/client"
 						}
 					},
+					"Pet": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Pet/client"
+						}
+					},
 					"Profile": {
 						"$ignoreUnknownInstances": false,
 						"$path": {

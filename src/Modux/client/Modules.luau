@@ -7,5 +7,6 @@ return {
 	StarterPlayer.StarterPlayerScripts.client.Enemy.EnemyController,
 	StarterPlayer.StarterPlayerScripts.client.Input.InputController,
 	StarterPlayer.StarterPlayerScripts.client.Net.NetController,
+	StarterPlayer.StarterPlayerScripts.client.Pet.PetController,
 	StarterPlayer.StarterPlayerScripts.client.Profile.ProfileController,
 } :: { ModuleScript }
