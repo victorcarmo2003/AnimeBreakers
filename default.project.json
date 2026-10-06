@@ -149,6 +149,12 @@
 				"client": {
 					"$className": "Folder",
 					"$ignoreUnknownInstances": false,
+					"Combat": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Combat/client"
+						}
+					},
 					"Effect": {
 						"$ignoreUnknownInstances": false,
 						"$path": {
