@@ -217,10 +217,6 @@
 				}
 			}
 		},
-		"Workspace": {
-			"Map": {
-				"$path": "assets/roblox/DevMap.rbxm"
-			}
-		}
+		"Workspace": {}
 	}
 }

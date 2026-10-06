@@ -27,11 +27,6 @@
 					}
 				}
 			},
-			"Workspace": {
-				"Map": {
-					"$path": "assets/roblox/DevMap.rbxm"
-				}
-			},
 			"ServerScriptService": {
 				"ServerPackages": {
 					"$path": "ServerPackages"
