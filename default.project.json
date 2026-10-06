@@ -155,6 +155,12 @@
 							"optional": "src/Effect/client"
 						}
 					},
+					"Enemy": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Enemy/client"
+						}
+					},
 					"Input": {
 						"$ignoreUnknownInstances": false,
 						"$path": {
