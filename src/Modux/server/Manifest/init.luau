@@ -1,6 +1,8 @@
 --!strict
 
 local ServerScriptService = game:GetService("ServerScriptService")
+local CombatDevService = require(ServerScriptService.server.ModuxTypes.CombatDevService)
+local CombatService = require(ServerScriptService.server.ModuxTypes.CombatService)
 local ContentService = require(ServerScriptService.server.ModuxTypes.ContentService)
 local DevService = require(ServerScriptService.server.ModuxTypes.DevService)
 local EconomyDevService = require(ServerScriptService.server.ModuxTypes.EconomyDevService)
@@ -14,6 +16,8 @@ local PlayerService = require(ServerScriptService.server.ModuxTypes.PlayerServic
 local ProfileService = require(ServerScriptService.server.ModuxTypes.ProfileService)
 
 export type AllServices = {
+	CombatDevService: CombatDevService.Public,
+	CombatService: CombatService.Public,
 	ContentService: ContentService.Public,
 	DevService: DevService.Public,
 	EconomyDevService: EconomyDevService.Public,

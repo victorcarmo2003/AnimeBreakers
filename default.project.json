@@ -78,6 +78,12 @@
 			"server": {
 				"$className": "Folder",
 				"$ignoreUnknownInstances": false,
+				"Combat": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Combat/server"
+					}
+				},
 				"Content": {
 					"$ignoreUnknownInstances": false,
 					"$path": {
