@@ -6,6 +6,7 @@ local EffectController = require(StarterPlayer.StarterPlayerScripts.client.Modux
 local EnemyController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.EnemyController)
 local InputController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.InputController)
 local NetController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.NetController)
+local PetController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.PetController)
 local ProfileController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.ProfileController)
 
 export type AllControllers = {
@@ -14,6 +15,7 @@ export type AllControllers = {
 	EnemyController: EnemyController.Public,
 	InputController: InputController.Public,
 	NetController: NetController.Public,
+	PetController: PetController.Public,
 	ProfileController: ProfileController.Public,
 }
 
