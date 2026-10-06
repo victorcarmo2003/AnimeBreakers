@@ -90,6 +90,12 @@
 						"optional": "src/Dev/server"
 					}
 				},
+				"Economy": {
+					"$ignoreUnknownInstances": false,
+					"$path": {
+						"optional": "src/Economy/server"
+					}
+				},
 				"Enemy": {
 					"$ignoreUnknownInstances": false,
 					"$path": {

@@ -3,6 +3,8 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ContentService = require(ServerScriptService.server.ModuxTypes.ContentService)
 local DevService = require(ServerScriptService.server.ModuxTypes.DevService)
+local EconomyDevService = require(ServerScriptService.server.ModuxTypes.EconomyDevService)
+local EconomyService = require(ServerScriptService.server.ModuxTypes.EconomyService)
 local EnemyDevService = require(ServerScriptService.server.ModuxTypes.EnemyDevService)
 local EnemyService = require(ServerScriptService.server.ModuxTypes.EnemyService)
 local EnemySpawn = require(ServerScriptService.server.ModuxTypes.EnemySpawn)
@@ -13,6 +15,8 @@ local ProfileService = require(ServerScriptService.server.ModuxTypes.ProfileServ
 export type AllServices = {
 	ContentService: ContentService.Public,
 	DevService: DevService.Public,
+	EconomyDevService: EconomyDevService.Public,
+	EconomyService: EconomyService.Public,
 	EnemyDevService: EnemyDevService.Public,
 	EnemyService: EnemyService.Public,
 	NetService: NetService.Public,

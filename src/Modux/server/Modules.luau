@@ -5,6 +5,8 @@ local ServerScriptService = game:GetService("ServerScriptService")
 return {
 	ServerScriptService.server.Content.ContentService,
 	ServerScriptService.server.Dev.DevService,
+	ServerScriptService.server.Economy.EconomyDevService,
+	ServerScriptService.server.Economy.EconomyService,
 	ServerScriptService.server.Enemy.EnemyDevService,
 	ServerScriptService.server.Enemy.EnemyService,
 	ServerScriptService.server.Enemy.EnemySpawn,
