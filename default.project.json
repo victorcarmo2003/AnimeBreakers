@@ -137,6 +137,12 @@
 				"client": {
 					"$className": "Folder",
 					"$ignoreUnknownInstances": false,
+					"Enemy": {
+						"$ignoreUnknownInstances": false,
+						"$path": {
+							"optional": "src/Enemy/client"
+						}
+					},
 					"Input": {
 						"$ignoreUnknownInstances": false,
 						"$path": {
