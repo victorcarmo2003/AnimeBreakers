@@ -3,6 +3,7 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 
 return {
+	StarterPlayer.StarterPlayerScripts.client.Combat.CombatController,
 	StarterPlayer.StarterPlayerScripts.client.Combat.CommandController,
 	StarterPlayer.StarterPlayerScripts.client.Effect.EffectController,
 	StarterPlayer.StarterPlayerScripts.client.Enemy.EnemyController,
