@@ -1,6 +1,7 @@
 --!strict
 
 local StarterPlayer = game:GetService("StarterPlayer")
+local CombatController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.CombatController)
 local CommandController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.CommandController)
 local DamageNumberController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.DamageNumberController)
 local EffectController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.EffectController)
@@ -11,6 +12,7 @@ local PetController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTyp
 local ProfileController = require(StarterPlayer.StarterPlayerScripts.client.ModuxTypes.ProfileController)
 
 export type AllControllers = {
+	CombatController: CombatController.Public,
 	CommandController: CommandController.Public,
 	DamageNumberController: DamageNumberController.Public,
 	EffectController: EffectController.Public,
